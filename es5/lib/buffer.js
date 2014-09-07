@@ -1,30 +1,23 @@
 "use strict";
 Object.defineProperties(exports, {
-  bufferConvertHandler: {get: function() {
-      return bufferConvertHandler;
+  convertStream: {get: function() {
+      return convertStream;
     }},
-  bufferConvertFilter: {get: function() {
-      return bufferConvertFilter;
-    }},
-  bufferStreamFilter: {get: function() {
-      return bufferStreamFilter;
+  bufferizeStreamable: {get: function() {
+      return bufferizeStreamable;
     }},
   __esModule: {value: true}
 });
 var $__quiver_45_promise__,
-    $__quiver_45_stream_45_util__,
-    $__quiver_45_component__;
+    $__quiver_45_stream_45_util__;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var createChannel = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).createChannel;
-var $__2 = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}),
-    simpleHandler = $__2.simpleHandler,
-    streamHandler = $__2.streamHandler,
-    streamFilter = $__2.streamFilter;
-var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(converter, readStream, writeStream) {
+var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__3(converter, readStream, writeStream) {
   var closed,
-      $__3,
+      $__2,
       data,
       converted,
+      $__4,
       $__5,
       $__6,
       $__7,
@@ -33,7 +26,6 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
       $__10,
       $__11,
       $__12,
-      $__13,
       err;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
@@ -46,20 +38,20 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
           $ctx.state = (true) ? 5 : 29;
           break;
         case 5:
-          $__5 = writeStream.prepareWrite;
-          $__6 = $__5.call(writeStream);
+          $__4 = writeStream.prepareWrite;
+          $__5 = $__4.call(writeStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__6;
+          return $__5;
         case 2:
-          $__7 = $ctx.sent;
+          $__6 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__8 = $__7.closed;
-          closed = $__8;
+          $__7 = $__6.closed;
+          closed = $__7;
           $ctx.state = 8;
           break;
         case 8:
@@ -70,23 +62,23 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
           $ctx.state = -2;
           break;
         case 10:
-          $__9 = readStream.read;
-          $__10 = $__9.call(readStream);
+          $__8 = readStream.read;
+          $__9 = $__8.call(readStream);
           $ctx.state = 17;
           break;
         case 17:
           $ctx.state = 13;
-          return $__10;
+          return $__9;
         case 13:
-          $__11 = $ctx.sent;
+          $__10 = $ctx.sent;
           $ctx.state = 15;
           break;
         case 15:
-          $__3 = $__11;
-          $__12 = $__3.closed;
-          closed = $__12;
-          $__13 = $__3.data;
-          data = $__13;
+          $__2 = $__10;
+          $__11 = $__2.closed;
+          closed = $__11;
+          $__12 = $__2.data;
+          data = $__12;
           $ctx.state = 19;
           break;
         case 19:
@@ -127,30 +119,14 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
         default:
           return $ctx.end();
       }
-  }, $__4, this);
+  }, $__3, this);
 }));
 var convertStream = (function(converter, inputStream) {
-  var $__3 = createChannel(),
-      readStream = $__3.readStream,
-      writeStream = $__3.writeStream;
+  var $__2 = createChannel(),
+      readStream = $__2.readStream,
+      writeStream = $__2.writeStream;
   pipeConvert(converter, inputStream, writeStream).catch((function(err) {}));
   return readStream;
-});
-var convertStreamable = (function(converter, streamable, replace) {
-  var originalToStream = streamable.toStream;
-  if (!originalToStream)
-    throw new Error('streamable do not have toStream() method');
-  var convertedToStream = (function() {
-    return originalToStream().then((function(readStream) {
-      return convertStream(converter, readStream);
-    }));
-  });
-  if (replace) {
-    streamable.toStream = convertedToStream;
-    return streamable;
-  } else {
-    return {toStream: convertedToStream};
-  }
 });
 var ensureBuffer = (function(data) {
   return Buffer.isBuffer(data) ? data : new Buffer(data);
@@ -162,30 +138,3 @@ var bufferizeStreamable = (function(streamable) {
   newStreamable.bufferMode = true;
   return newStreamable;
 });
-var bufferConvertHandler = (function(converter) {
-  return simpleHandler((function(args, inputStream) {
-    return convertStream(converter, inputStream);
-  }), 'stream', 'stream');
-});
-var bufferConvertFilter = (function(converter, mode) {
-  var replace = arguments[2] !== (void 0) ? arguments[2] : false;
-  var inMode = (mode == 'in' || mode == 'inout');
-  var outMode = (mode == 'out' || mode == 'inout');
-  return streamFilter((function(config, handler) {
-    return (function(args, inputStreamable) {
-      if (inMode) {
-        inputStreamable = convertStreamable(converter, inputStreamable, replace);
-      }
-      return handler(args, inputStreamable).then((function(resultStreamable) {
-        if (!outMode)
-          return resultStreamable;
-        return convertStreamable(converter, resultStreamable, replace);
-      }));
-    });
-  }));
-});
-var bufferStreamFilter = streamFilter((function(config, handler) {
-  return (function(args, inputStreamable) {
-    return handler(args, bufferizeStreamable(inputStreamable)).then(bufferizeStreamable);
-  });
-}));

@@ -12,26 +12,27 @@ var $__quiver_45_error__,
     $__quiver_45_promise__,
     $__buffertools__,
     $__quiver_45_stream_45_util__,
-    $__pushback_46_js__,
-    $__stream_45_head_46_js__;
+    $__head_46_js__;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
-var $__6 = buffertools,
-    compareBuffer = $__6.compare,
-    indexOf = $__6.indexOf;
-var createChannel = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).createChannel;
-var pushbackStream = ($__pushback_46_js__ = require("./pushback.js"), $__pushback_46_js__ && $__pushback_46_js__.__esModule && $__pushback_46_js__ || {default: $__pushback_46_js__}).pushbackStream;
-var $__5 = ($__stream_45_head_46_js__ = require("./stream-head.js"), $__stream_45_head_46_js__ && $__stream_45_head_46_js__.__esModule && $__stream_45_head_46_js__ || {default: $__stream_45_head_46_js__}),
-    extractStreamHead = $__5.extractStreamHead,
-    extractFixedStreamHead = $__5.extractFixedStreamHead;
-var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__7(readStream, writeStream) {
+var $__5 = buffertools,
+    compareBuffer = $__5.compare,
+    indexOf = $__5.indexOf;
+var $__3 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    createChannel = $__3.createChannel,
+    pushbackStream = $__3.pushbackStream;
+var $__4 = ($__head_46_js__ = require("./head.js"), $__head_46_js__ && $__head_46_js__.__esModule && $__head_46_js__ || {default: $__head_46_js__}),
+    extractStreamHead = $__4.extractStreamHead,
+    extractFixedStreamHead = $__4.extractFixedStreamHead;
+var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__6(readStream, writeStream) {
   var options,
       closed,
-      $__6,
+      $__5,
       data,
       chunkHead,
       chunkSize,
+      $__7,
       $__8,
       $__9,
       $__10,
@@ -40,7 +41,6 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
       $__13,
       $__14,
       $__15,
-      $__16,
       err;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -58,20 +58,20 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = (true) ? 5 : 27;
           break;
         case 5:
-          $__8 = writeStream.prepareWrite;
-          $__9 = $__8.call(writeStream);
+          $__7 = writeStream.prepareWrite;
+          $__8 = $__7.call(writeStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__9;
+          return $__8;
         case 2:
-          $__10 = $ctx.sent;
+          $__9 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__11 = $__10.closed;
-          closed = $__11;
+          $__10 = $__9.closed;
+          closed = $__10;
           $ctx.state = 8;
           break;
         case 8:
@@ -82,23 +82,23 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = -2;
           break;
         case 10:
-          $__12 = readStream.read;
-          $__13 = $__12.call(readStream);
+          $__11 = readStream.read;
+          $__12 = $__11.call(readStream);
           $ctx.state = 17;
           break;
         case 17:
           $ctx.state = 13;
-          return $__13;
+          return $__12;
         case 13:
-          $__14 = $ctx.sent;
+          $__13 = $ctx.sent;
           $ctx.state = 15;
           break;
         case 15:
-          $__6 = $__14;
-          $__15 = $__6.closed;
-          closed = $__15;
-          $__16 = $__6.data;
-          data = $__16;
+          $__5 = $__13;
+          $__14 = $__5.closed;
+          closed = $__14;
+          $__15 = $__5.data;
+          data = $__15;
           $ctx.state = 19;
           break;
         case 19:
@@ -143,18 +143,18 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
         default:
           return $ctx.end();
       }
-  }, $__7, this);
+  }, $__6, this);
 }));
 var chunkSeparator = new Buffer('\r\n');
-var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(function $__17(readStream) {
+var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(function $__16(readStream) {
   var headers,
-      $__6,
+      $__5,
       head,
       readStream,
+      $__17,
       $__18,
       $__19,
-      $__20,
-      $__21;
+      $__20;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -166,22 +166,22 @@ var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(functio
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__18 = extractStreamHead(readStream, chunkSeparator);
+          $__17 = extractStreamHead(readStream, chunkSeparator);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__18;
+          return $__17;
         case 2:
-          $__19 = $ctx.sent;
+          $__18 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__6 = $__19;
-          $__20 = $__6[0];
-          head = $__20;
-          $__21 = $__6[1];
-          readStream = $__21;
+          $__5 = $__18;
+          $__19 = $__5[0];
+          head = $__19;
+          $__20 = $__5[1];
+          readStream = $__20;
           $ctx.state = 8;
           break;
         case 8:
@@ -198,15 +198,16 @@ var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(functio
         default:
           return $ctx.end();
       }
-  }, $__17, this);
+  }, $__16, this);
 }));
-var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__22(readStream, writeStream, size) {
+var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__21(readStream, writeStream, size) {
   var closed,
-      $__6,
+      $__5,
       data,
       bufferSize,
       head,
       rest,
+      $__22,
       $__23,
       $__24,
       $__25,
@@ -214,8 +215,7 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__22(readS
       $__27,
       $__28,
       $__29,
-      $__30,
-      $__31;
+      $__30;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -223,20 +223,20 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__22(readS
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__23 = writeStream.prepareWrite;
-          $__24 = $__23.call(writeStream);
+          $__22 = writeStream.prepareWrite;
+          $__23 = $__22.call(writeStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__24;
+          return $__23;
         case 2:
-          $__25 = $ctx.sent;
+          $__24 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__26 = $__25.closed;
-          closed = $__26;
+          $__25 = $__24.closed;
+          closed = $__25;
           $ctx.state = 8;
           break;
         case 8:
@@ -247,23 +247,23 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__22(readS
           $ctx.state = -2;
           break;
         case 10:
-          $__27 = readStream.read;
-          $__28 = $__27.call(readStream);
+          $__26 = readStream.read;
+          $__27 = $__26.call(readStream);
           $ctx.state = 17;
           break;
         case 17:
           $ctx.state = 13;
-          return $__28;
+          return $__27;
         case 13:
-          $__29 = $ctx.sent;
+          $__28 = $ctx.sent;
           $ctx.state = 15;
           break;
         case 15:
-          $__6 = $__29;
-          $__30 = $__6.closed;
-          closed = $__30;
-          $__31 = $__6.data;
-          data = $__31;
+          $__5 = $__28;
+          $__29 = $__5.closed;
+          closed = $__29;
+          $__30 = $__5.data;
+          data = $__30;
           $ctx.state = 19;
           break;
         case 19:
@@ -306,11 +306,11 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__22(readS
         default:
           return $ctx.end();
       }
-  }, $__22, this);
+  }, $__21, this);
 }));
-var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $__32(readStream, writeStream) {
+var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $__31(readStream, writeStream) {
   var options,
-      $__6,
+      $__5,
       chunkHead,
       readStream,
       chunkSizeText,
@@ -318,6 +318,7 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
       chunkSize,
       trailingHeaders,
       head,
+      $__32,
       $__33,
       $__34,
       $__35,
@@ -325,7 +326,6 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
       $__37,
       $__38,
       $__39,
-      $__40,
       err;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -343,22 +343,22 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
           $ctx.state = (true) ? 5 : 34;
           break;
         case 5:
-          $__33 = extractStreamHead(readStream, chunkSeparator);
+          $__32 = extractStreamHead(readStream, chunkSeparator);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__33;
+          return $__32;
         case 2:
-          $__34 = $ctx.sent;
+          $__33 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__6 = $__34;
-          $__35 = $__6[0];
-          chunkHead = $__35;
-          $__36 = $__6[1];
-          readStream = $__36;
+          $__5 = $__33;
+          $__34 = $__5[0];
+          chunkHead = $__34;
+          $__35 = $__5[1];
+          readStream = $__35;
           $ctx.state = 8;
           break;
         case 8:
@@ -399,22 +399,22 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
           $ctx.state = 21;
           break;
         case 21:
-          $__37 = extractFixedStreamHead(readStream, 2);
+          $__36 = extractFixedStreamHead(readStream, 2);
           $ctx.state = 27;
           break;
         case 27:
           $ctx.state = 23;
-          return $__37;
+          return $__36;
         case 23:
-          $__38 = $ctx.sent;
+          $__37 = $ctx.sent;
           $ctx.state = 25;
           break;
         case 25:
-          $__6 = $__38;
-          $__39 = $__6[0];
-          head = $__39;
-          $__40 = $__6[1];
-          readStream = $__40;
+          $__5 = $__37;
+          $__38 = $__5[0];
+          head = $__38;
+          $__39 = $__5[1];
+          readStream = $__39;
           $ctx.state = 29;
           break;
         case 29:
@@ -442,19 +442,19 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
         default:
           return $ctx.end();
       }
-  }, $__32, this);
+  }, $__31, this);
 }));
 var streamToChunkedStream = (function(unchunkedStream) {
-  var $__6 = createChannel(),
-      readStream = $__6.readStream,
-      writeStream = $__6.writeStream;
+  var $__5 = createChannel(),
+      readStream = $__5.readStream,
+      writeStream = $__5.writeStream;
   pipeChunkedStream(unchunkedStream, writeStream);
   return readStream;
 });
 var streamToUnchunkedStream = (function(chunkedStream) {
-  var $__6 = createChannel(),
-      readStream = $__6.readStream,
-      writeStream = $__6.writeStream;
+  var $__5 = createChannel(),
+      readStream = $__5.readStream,
+      writeStream = $__5.writeStream;
   pipeUnchunkedStream(chunkedStream, writeStream);
   return readStream;
 });

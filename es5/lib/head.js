@@ -10,13 +10,13 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_error__,
     $__quiver_45_promise__,
-    $__buffertools__,
-    $__pushback_46_js__;
+    $__quiver_45_stream_45_util__,
+    $__buffertools__;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
+var pushbackStream = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).pushbackStream;
 var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
 var indexOf = buffertools.indexOf;
-var pushbackStream = ($__pushback_46_js__ = require("./pushback.js"), $__pushback_46_js__ && $__pushback_46_js__.__esModule && $__pushback_46_js__ || {default: $__pushback_46_js__}).pushbackStream;
 var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__5(readStream, separator) {
   var options,
       headBuffer,
