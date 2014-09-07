@@ -36,28 +36,28 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
       $__9,
       $__10,
       $__11,
-      err,
       $__12,
       $__13,
       $__14,
       $__15,
-      $__16;
+      $__16,
+      err;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
         case 0:
           options = $arguments[2] !== (void 0) ? $arguments[2] : {};
-          $ctx.state = 58;
+          $ctx.state = 38;
           break;
-        case 58:
-          $ctx.state = (true) ? 13 : -2;
+        case 38:
+          $ctx.pushTry(28, null);
+          $ctx.state = 31;
           break;
-        case 13:
-          $ctx.pushTry(11, null);
-          $ctx.state = 14;
+        case 31:
+          $ctx.state = (true) ? 5 : 27;
           break;
-        case 14:
+        case 5:
           $__8 = writeStream.prepareWrite;
           $__9 = $__8.call(writeStream);
           $ctx.state = 6;
@@ -75,79 +75,45 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = 8;
           break;
         case 8:
-          $ctx.popTry();
-          $ctx.state = 16;
-          break;
-        case 11:
-          $ctx.popTry();
-          err = $ctx.storedException;
-          $ctx.state = 9;
+          $ctx.state = (closed) ? 9 : 10;
           break;
         case 9:
-          $ctx.returnValue = readStream.closeRead(err);
-          $ctx.state = -2;
-          break;
-        case 16:
-          $ctx.state = (closed) ? 18 : 19;
-          break;
-        case 18:
           $ctx.returnValue = readStream.closeRead();
           $ctx.state = -2;
           break;
-        case 19:
-          $ctx.pushTry(31, null);
-          $ctx.state = 34;
-          break;
-        case 34:
+        case 10:
           $__12 = readStream.read;
           $__13 = $__12.call(readStream);
-          $ctx.state = 26;
+          $ctx.state = 17;
           break;
-        case 26:
-          $ctx.state = 22;
+        case 17:
+          $ctx.state = 13;
           return $__13;
-        case 22:
+        case 13:
           $__14 = $ctx.sent;
-          $ctx.state = 24;
+          $ctx.state = 15;
           break;
-        case 24:
+        case 15:
           $__6 = $__14;
           $__15 = $__6.closed;
           closed = $__15;
           $__16 = $__6.data;
           data = $__16;
-          $ctx.state = 28;
+          $ctx.state = 19;
           break;
-        case 28:
-          $ctx.popTry();
-          $ctx.state = 36;
+        case 19:
+          $ctx.state = (closed) ? 22 : 21;
           break;
-        case 31:
-          $ctx.popTry();
-          err = $ctx.storedException;
-          $ctx.state = 29;
-          break;
-        case 29:
-          $ctx.returnValue = writeStream.closeWrite(err);
-          $ctx.state = -2;
-          break;
-        case 36:
-          $ctx.state = (closed) ? 40 : 39;
-          break;
-        case 40:
+        case 22:
           chunkHead = '0\r\n\r\n';
           writeStream.write(chunkHead);
           writeStream.closeWrite();
-          $ctx.state = 41;
+          $ctx.state = 23;
           break;
-        case 41:
+        case 23:
           $ctx.state = -2;
           break;
-        case 39:
-          $ctx.pushTry(47, null);
-          $ctx.state = 50;
-          break;
-        case 50:
+        case 21:
           if (!Buffer.isBuffer(data))
             data = new Buffer(data);
           chunkSize = data.length;
@@ -155,23 +121,23 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
           writeStream.write(chunkHead);
           writeStream.write(data);
           writeStream.write('\r\n');
-          $ctx.state = 52;
+          $ctx.state = 31;
           break;
-        case 52:
+        case 27:
           $ctx.popTry();
-          $ctx.state = 58;
+          $ctx.state = -2;
           break;
-        case 47:
+        case 28:
           $ctx.popTry();
           err = $ctx.storedException;
-          $ctx.state = 45;
+          $ctx.state = 34;
           break;
-        case 45:
-          readStream.closeRead(err);
-          writeStream.closeWrite(err);
-          $ctx.state = 46;
-          break;
-        case 46:
+        case 34:
+          try {
+            writeStream.closeWrite(err);
+          } finally {
+            readStream.closeRead(err);
+          }
           $ctx.state = -2;
           break;
         default:
@@ -468,8 +434,9 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
         case 41:
           try {
             writeStream.closeWrite(err);
-          } catch (err) {}
-          readStream.closeRead(err);
+          } finally {
+            readStream.closeRead(err);
+          }
           $ctx.state = -2;
           break;
         default:

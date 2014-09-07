@@ -72,7 +72,46 @@ describe('chunked stream test', (function() {
         }
     }, $__6, this);
   })));
-  it('complex chunked stream to stream', async($traceurRuntime.initGeneratorFunction(function $__7() {
+  it('bad chunked stream test', async($traceurRuntime.initGeneratorFunction(function $__7() {
+    var testBuffers;
+    return $traceurRuntime.createGeneratorInstance(function($ctx) {
+      while (true)
+        switch ($ctx.state) {
+          case 0:
+            testBuffers = (function(buffers) {
+              var readStream = buffersToStream(buffers);
+              var unchunkedStream = streamToUnchunkedStream(readStream);
+              return streamToText(unchunkedStream).should.be.rejected;
+            });
+            $ctx.state = 14;
+            break;
+          case 14:
+            $ctx.state = 2;
+            return testBuffers(['3', '\r\n', 'hello', '\r\n', '0', '\r\n', '\r\n']);
+          case 2:
+            $ctx.maybeThrow();
+            $ctx.state = 4;
+            break;
+          case 4:
+            $ctx.state = 6;
+            return testBuffers(['5\r\n', 'hello', '\r\n', '0', '\r\n']);
+          case 6:
+            $ctx.maybeThrow();
+            $ctx.state = 8;
+            break;
+          case 8:
+            $ctx.state = 10;
+            return testBuffers(['5\r\n', 'hello', '\r\n']);
+          case 10:
+            $ctx.maybeThrow();
+            $ctx.state = -2;
+            break;
+          default:
+            return $ctx.end();
+        }
+    }, $__7, this);
+  })));
+  it('complex chunked stream to stream', async($traceurRuntime.initGeneratorFunction(function $__8() {
     var testBuffers,
         testContent,
         readStream,
@@ -97,9 +136,9 @@ describe('chunked stream test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__7, this);
+    }, $__8, this);
   })));
-  it('combined chunk unchunk test', async($traceurRuntime.initGeneratorFunction(function $__8() {
+  it('combined chunk unchunk test', async($traceurRuntime.initGeneratorFunction(function $__9() {
     var unicodeBuffer,
         testBuffers,
         originalStream,
@@ -126,6 +165,6 @@ describe('chunked stream test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__8, this);
+    }, $__9, this);
   })));
 }));

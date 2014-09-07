@@ -29,23 +29,23 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
       $__6,
       $__7,
       $__8,
-      err,
       $__9,
       $__10,
       $__11,
       $__12,
-      $__13;
+      $__13,
+      err;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
         case 0:
-          $ctx.state = (true) ? 13 : -2;
+          $ctx.pushTry(30, null);
+          $ctx.state = 33;
           break;
-        case 13:
-          $ctx.pushTry(11, null);
-          $ctx.state = 14;
+        case 33:
+          $ctx.state = (true) ? 5 : 29;
           break;
-        case 14:
+        case 5:
           $__5 = writeStream.prepareWrite;
           $__6 = $__5.call(writeStream);
           $ctx.state = 6;
@@ -63,104 +63,66 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
           $ctx.state = 8;
           break;
         case 8:
-          $ctx.popTry();
-          $ctx.state = 16;
-          break;
-        case 11:
-          $ctx.popTry();
-          err = $ctx.storedException;
-          $ctx.state = 9;
+          $ctx.state = (closed) ? 9 : 10;
           break;
         case 9:
-          $ctx.returnValue = readStream.closeRead(err);
-          $ctx.state = -2;
-          break;
-        case 16:
-          $ctx.state = (closed) ? 18 : 19;
-          break;
-        case 18:
           $ctx.returnValue = readStream.closeRead();
           $ctx.state = -2;
           break;
-        case 19:
-          $ctx.pushTry(31, null);
-          $ctx.state = 34;
-          break;
-        case 34:
+        case 10:
           $__9 = readStream.read;
           $__10 = $__9.call(readStream);
-          $ctx.state = 26;
+          $ctx.state = 17;
           break;
-        case 26:
-          $ctx.state = 22;
+        case 17:
+          $ctx.state = 13;
           return $__10;
-        case 22:
+        case 13:
           $__11 = $ctx.sent;
-          $ctx.state = 24;
+          $ctx.state = 15;
           break;
-        case 24:
+        case 15:
           $__3 = $__11;
           $__12 = $__3.closed;
           closed = $__12;
           $__13 = $__3.data;
           data = $__13;
-          $ctx.state = 28;
+          $ctx.state = 19;
           break;
-        case 28:
-          $ctx.popTry();
-          $ctx.state = 36;
+        case 19:
+          $ctx.state = (closed) ? 20 : 21;
           break;
-        case 31:
-          $ctx.popTry();
-          err = $ctx.storedException;
-          $ctx.state = 29;
-          break;
-        case 29:
-          $ctx.returnValue = writeStream.closeWrite(err);
-          $ctx.state = -2;
-          break;
-        case 36:
-          $ctx.state = (closed) ? 38 : 39;
-          break;
-        case 38:
+        case 20:
           $ctx.returnValue = writeStream.closeWrite();
           $ctx.state = -2;
           break;
-        case 39:
-          $ctx.pushTry(49, null);
-          $ctx.state = 52;
-          break;
-        case 52:
-          $ctx.state = 42;
+        case 21:
+          $ctx.state = 24;
           return converter(data);
-        case 42:
+        case 24:
           converted = $ctx.sent;
-          $ctx.state = 44;
+          $ctx.state = 26;
           break;
-        case 44:
+        case 26:
+          writeStream.write(converted);
+          $ctx.state = 33;
+          break;
+        case 29:
           $ctx.popTry();
-          $ctx.state = 54;
-          break;
-        case 49:
-          $ctx.popTry();
-          err = $ctx.storedException;
-          $ctx.state = 47;
-          break;
-        case 47:
-          writeStream.closeWrite(err);
-          readStream.closeRead(err);
-          $ctx.state = 48;
-          break;
-        case 48:
           $ctx.state = -2;
           break;
-        case 54:
+        case 30:
+          $ctx.popTry();
+          err = $ctx.storedException;
+          $ctx.state = 36;
+          break;
+        case 36:
           try {
-            writeStream.write(converted);
-          } catch (err) {
+            writeStream.closeWrite(err);
+          } finally {
             readStream.closeRead(err);
           }
-          $ctx.state = 0;
+          $ctx.state = -2;
           break;
         default:
           return $ctx.end();

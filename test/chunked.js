@@ -58,6 +58,40 @@ describe('chunked stream test', () => {
       .should.eventually.equal(testContent)
   }))
 
+  it('bad chunked stream test', async(function*() {
+    var testBuffers = buffers => {
+      var readStream = buffersToStream(buffers)
+      var unchunkedStream = streamToUnchunkedStream(readStream)
+
+      return streamToText(unchunkedStream)
+        .should.be.rejected
+    }
+
+    yield testBuffers([
+      '3', // wrong count
+      '\r\n',
+      'hello',
+      '\r\n',
+      '0',
+      '\r\n',
+      '\r\n'
+    ])
+
+    yield testBuffers([
+      '5\r\n',
+      'hello',
+      '\r\n',
+      '0',
+      '\r\n' // missing last \r\n
+    ])
+
+    yield testBuffers([
+      '5\r\n',
+      'hello',
+      '\r\n' // no trailer
+    ])
+  }))
+
   it('complex chunked stream to stream', async(function*() {
     var testBuffers = [
       '6\r',
