@@ -86,11 +86,9 @@ describe('buffer convert test', (function() {
         switch ($ctx.state) {
           case 0:
             toUpperCase = (function(data) {
-              Buffer.isBuffer(data).should.equal(true);
               return data.toString().toUpperCase();
             });
             toLowerCase = (function(data) {
-              Buffer.isBuffer(data).should.equal(true);
               return data.toString().toLowerCase();
             });
             component = simpleHandler((function(args, name) {

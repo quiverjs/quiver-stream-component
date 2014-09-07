@@ -127,10 +127,10 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
           $ctx.state = -2;
           break;
         case 39:
-          $ctx.pushTry(47, null);
-          $ctx.state = 50;
+          $ctx.pushTry(49, null);
+          $ctx.state = 52;
           break;
-        case 50:
+        case 52:
           $ctx.state = 42;
           return converter(data);
         case 42:
@@ -139,19 +139,27 @@ var pipeConvert = async($traceurRuntime.initGeneratorFunction(function $__4(conv
           break;
         case 44:
           $ctx.popTry();
-          $ctx.state = 52;
+          $ctx.state = 54;
           break;
-        case 47:
+        case 49:
           $ctx.popTry();
           err = $ctx.storedException;
-          $ctx.state = 45;
+          $ctx.state = 47;
           break;
-        case 45:
-          $ctx.returnValue = writeStream.closeWrite(err);
+        case 47:
+          writeStream.closeWrite(err);
+          readStream.closeRead(err);
+          $ctx.state = 48;
+          break;
+        case 48:
           $ctx.state = -2;
           break;
-        case 52:
-          writeStream.write(converted);
+        case 54:
+          try {
+            writeStream.write(converted);
+          } catch (err) {
+            readStream.closeRead(err);
+          }
           $ctx.state = 0;
           break;
         default:
