@@ -3,9 +3,6 @@ Object.defineProperties(exports, {
   convertStream: {get: function() {
       return convertStream;
     }},
-  bufferizeStreamable: {get: function() {
-      return bufferizeStreamable;
-    }},
   __esModule: {value: true}
 });
 var $__quiver_45_promise__,
@@ -127,14 +124,4 @@ var convertStream = (function(converter, inputStream) {
       writeStream = $__2.writeStream;
   pipeConvert(converter, inputStream, writeStream).catch((function(err) {}));
   return readStream;
-});
-var ensureBuffer = (function(data) {
-  return Buffer.isBuffer(data) ? data : new Buffer(data);
-});
-var bufferizeStreamable = (function(streamable) {
-  if (streamable.bufferMode)
-    return streamable;
-  var newStreamable = convertStreamable(ensureBuffer, streamable, true);
-  newStreamable.bufferMode = true;
-  return newStreamable;
 });

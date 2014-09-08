@@ -43,9 +43,11 @@ describe('timeout stream test', () => {
     var component = simpleHandler(
       (args, name) => 'Hello, ' + name,
       'text', 'text')
-    .addMiddleware(timeoutStreamFilter(100, 'in'))
+    .addMiddleware(timeoutStreamFilter('in'))
 
-    var handler = yield loadStreamHandler({}, component)
+    var handler = yield loadStreamHandler({
+      streamTimeout: 100
+    }, component)
 
     yield handler({}, textToStreamable('World'))
       .then(streamableToText)

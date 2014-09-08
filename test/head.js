@@ -8,7 +8,7 @@ import {
 
 import { 
   extractStreamHead, extractFixedStreamHead 
-} from '../lib/head.js'
+} from '../lib/stream-component.js'
 
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'

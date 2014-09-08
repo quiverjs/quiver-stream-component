@@ -16,7 +16,7 @@ import {
   bufferConvertHandler,
   bufferConvertFilter,
   bufferStreamFilter
-} from '../lib/component.js'
+} from '../lib/stream-component.js'
 
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'

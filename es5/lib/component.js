@@ -6,9 +6,6 @@ Object.defineProperties(exports, {
   bufferConvertFilter: {get: function() {
       return bufferConvertFilter;
     }},
-  bufferizeStreamFilter: {get: function() {
-      return bufferizeStreamFilter;
-    }},
   chunkedTransformHandler: {get: function() {
       return chunkedTransformHandler;
     }},
@@ -54,24 +51,21 @@ var bufferConvertHandler = (function(converter) {
     return convertStream(converter, inputStream);
   }), 'stream', 'stream');
 });
-var bufferConvertFilter = (function(converter, mode) {
-  var replaceStreamable = arguments[2] !== (void 0) ? arguments[2] : false;
-  var streamConverter = (function(readStream) {
-    return convertStream(converter, readStream);
+var bufferConvertFilter = (function(bufferConverter, mode) {
+  var inReplace = arguments[2] !== (void 0) ? arguments[2] : false;
+  var converterBuilder = (function(config) {
+    return (function(readStream) {
+      return convertStream(bufferConverter, readStream);
+    });
   });
-  return streamConvertFilter(streamConverter, mode, replaceStreamable);
+  return streamConvertFilter(converterBuilder, mode, inReplace);
 });
-var bufferizeStreamFilter = streamFilter((function(config, handler) {
-  return (function(args, inputStreamable) {
-    return handler(args, bufferizeStreamable(inputStreamable)).then(bufferizeStreamable);
-  });
-}));
 var chunkedTransformHandler = simpleHandler((function(args, inputStream) {
   return streamToChunkedStream(inputStream);
-}), 'stream', 'stream');
+}), 'stream', 'stream').privatizedConstructor();
 var unchunkedTransformHandler = simpleHandler((function(args, inputStream) {
   return streamToUnchunkedStream(inputStream);
-}), 'stream', 'stream');
+}), 'stream', 'stream').privatizedConstructor();
 var headerExtractFilter = (function(separator) {
   if (!Buffer.isBuffer(separator))
     separator = new Buffer(separator);
@@ -90,15 +84,31 @@ var headerExtractFilter = (function(separator) {
     });
   }));
 });
-var throttledStreamFilter = (function(rate, mode) {
-  var streamConverter = (function(readStream) {
-    return throttledStream(readStream, rate);
+var throttledStreamFilter = (function() {
+  var mode = arguments[0] !== (void 0) ? arguments[0] : 'inout';
+  var converterBuilder = (function(config) {
+    var $__9;
+    var $__8 = config,
+        streamThrottleRate = ($__9 = $__8.streamThrottleRate) === void 0 ? -1 : $__9;
+    if (!(streamThrottleRate > 0))
+      return null;
+    return (function(readStream) {
+      return throttledStream(readStream, streamThrottleRate);
+    });
   });
-  return streamConvertFilter(streamConverter, mode, true);
+  return streamConvertFilter(converterBuilder, mode, true);
 });
-var timeoutStreamFilter = (function(timeout, mode) {
-  var streamConverter = (function(readStream) {
-    return timeoutStream(readStream, timeout);
+var timeoutStreamFilter = (function() {
+  var mode = arguments[0] !== (void 0) ? arguments[0] : 'inout';
+  var converterBuilder = (function(config) {
+    var $__8;
+    var $__9 = config,
+        streamTimeout = ($__8 = $__9.streamTimeout) === void 0 ? -1 : $__8;
+    if (!(streamTimeout > 0))
+      return null;
+    return (function(readStream) {
+      return timeoutStream(readStream, streamTimeout);
+    });
   });
-  return streamConvertFilter(streamConverter, mode, true);
+  return streamConvertFilter(converterBuilder, mode, true);
 });
