@@ -6,7 +6,7 @@
   },
   "name": "quiver-stream-component",
   "desription": "Components for stream manipulation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/quiverjs/file-component",
   "repository": {
     "url": "git@github.com:quiverjs/file-component.git"
@@ -27,8 +27,8 @@
     "chai-as-promised": "^4.1.1"
   },
   "bugs": {
-    "url": "https://github.com/quiverjs/file-component/issues",
-    "email": "quiverjs@soareschen.com"
+    "url": "https://github.com/quiverjs/stream-component/issues",
+    "email": "quiver@quiverjs.org"
   },
   "licenses": {
     "type": "MIT",
