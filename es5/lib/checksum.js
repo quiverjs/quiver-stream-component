@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   checksumStream: {get: function() {
       return checksumStream;
     }},
+  checksumStreamable: {get: function() {
+      return checksumStreamable;
+    }},
   checksumHandler: {get: function() {
       return checksumHandler;
     }},
@@ -75,6 +78,46 @@ var checksumStream = async($traceurRuntime.initGeneratorFunction(function $__5(r
       }
   }, $__5, this);
 }));
+var checksumStreamable = async($traceurRuntime.initGeneratorFunction(function $__11(streamable, algorithm, checksumField) {
+  var readStream,
+      checksum;
+  return $traceurRuntime.createGeneratorInstance(function($ctx) {
+    while (true)
+      switch ($ctx.state) {
+        case 0:
+          $ctx.state = (streamable[checksumField]) ? 1 : 2;
+          break;
+        case 1:
+          $ctx.returnValue = streamable[checksumField];
+          $ctx.state = -2;
+          break;
+        case 2:
+          $ctx.state = 5;
+          return streamable.toStream();
+        case 5:
+          readStream = $ctx.sent;
+          $ctx.state = 7;
+          break;
+        case 7:
+          $ctx.state = 9;
+          return checksumStream(readStream, algorithm);
+        case 9:
+          checksum = $ctx.sent;
+          $ctx.state = 11;
+          break;
+        case 11:
+          checksumStreamable[checksumField] = checksum;
+          $ctx.state = 15;
+          break;
+        case 15:
+          $ctx.returnValue = checksum;
+          $ctx.state = -2;
+          break;
+        default:
+          return $ctx.end();
+      }
+  }, $__11, this);
+}));
 var checksumHandler = (function(algorithm) {
   if (typeof algorithm != 'string')
     throw new Error('Missing checksum algorithm');
@@ -82,33 +125,8 @@ var checksumHandler = (function(algorithm) {
   return simpleHandlerBuilder((function(config) {
     if (getHashes().indexOf(algorithm) == -1)
       return reject(error(500, 'platform do not ' + 'support checksum algorithm ' + algorithm));
-    return async($traceurRuntime.initGeneratorFunction(function $__11(args, streamable) {
-      var readStream;
-      return $traceurRuntime.createGeneratorInstance(function($ctx) {
-        while (true)
-          switch ($ctx.state) {
-            case 0:
-              $ctx.state = (streamable[checksumField]) ? 1 : 2;
-              break;
-            case 1:
-              $ctx.returnValue = streamable[checksumField];
-              $ctx.state = -2;
-              break;
-            case 2:
-              $ctx.state = 5;
-              return streamable.toStream();
-            case 5:
-              readStream = $ctx.sent;
-              $ctx.state = 7;
-              break;
-            case 7:
-              $ctx.returnValue = checksumStream(readStream, algorithm);
-              $ctx.state = -2;
-              break;
-            default:
-              return $ctx.end();
-          }
-      }, $__11, this);
-    }));
+    return (function(args, streamable) {
+      return checksumStreamable(streamable, algorithm, checksumField);
+    });
   }), 'streamable', 'text');
 });

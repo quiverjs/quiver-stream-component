@@ -21,6 +21,9 @@ Object.defineProperties(exports, {
   checksumStream: {get: function() {
       return checksumStream;
     }},
+  checksumStreamable: {get: function() {
+      return checksumStreamable;
+    }},
   sizeWindowedStream: {get: function() {
       return sizeWindowedStream;
     }},
@@ -63,7 +66,8 @@ var $__buffer_46_js__,
 var convertStream = ($__buffer_46_js__ = require("./buffer.js"), $__buffer_46_js__ && $__buffer_46_js__.__esModule && $__buffer_46_js__ || {default: $__buffer_46_js__}).convertStream;
 var $__1 = ($__checksum_46_js__ = require("./checksum.js"), $__checksum_46_js__ && $__checksum_46_js__.__esModule && $__checksum_46_js__ || {default: $__checksum_46_js__}),
     checksumHandler = $__1.checksumHandler,
-    checksumStream = $__1.checksumStream;
+    checksumStream = $__1.checksumStream,
+    checksumStreamable = $__1.checksumStreamable;
 var $__2 = ($__chunked_46_js__ = require("./chunked.js"), $__chunked_46_js__ && $__chunked_46_js__.__esModule && $__chunked_46_js__ || {default: $__chunked_46_js__}),
     streamToChunkedStream = $__2.streamToChunkedStream,
     streamToUnchunkedStream = $__2.streamToUnchunkedStream;
