@@ -106,7 +106,8 @@ var checksumStreamable = async($traceurRuntime.initGeneratorFunction(function $_
           $ctx.state = 11;
           break;
         case 11:
-          checksumStreamable[checksumField] = checksum;
+          if (streamable.reusable)
+            streamable[checksumField] = checksum;
           $ctx.state = 15;
           break;
         case 15:

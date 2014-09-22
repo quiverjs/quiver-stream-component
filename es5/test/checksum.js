@@ -17,6 +17,7 @@ describe('stream checksum test', (function() {
   it('sha1sum', async($traceurRuntime.initGeneratorFunction(function $__5() {
     var main,
         handler,
+        testChecksum,
         streamable;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
@@ -33,14 +34,20 @@ describe('stream checksum test', (function() {
             $ctx.state = 4;
             break;
           case 4:
+            testChecksum = '648a6a6ffffdaa0badb23b8baf90b6168dd16b3a';
             streamable = buffersToStreamable(['Hello ', 'World\n']);
             $ctx.state = 12;
             break;
           case 12:
             $ctx.state = 6;
-            return handler({}, streamable).should.eventually.equal('648a6a6ffffdaa0badb23b8baf90b6168dd16b3a');
+            return handler({}, streamable).should.eventually.equal(testChecksum);
           case 6:
             $ctx.maybeThrow();
+            $ctx.state = 8;
+            break;
+          case 8:
+            should.exist(streamable['checksum-sha1']);
+            streamable['checksum-sha1'].should.equal(testChecksum);
             $ctx.state = -2;
             break;
           default:

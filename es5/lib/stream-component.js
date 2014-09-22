@@ -15,6 +15,12 @@ Object.defineProperties(exports, {
   streamConvertFilter: {get: function() {
       return streamConvertFilter;
     }},
+  compressStream: {get: function() {
+      return compressStream;
+    }},
+  compressStreamable: {get: function() {
+      return compressStreamable;
+    }},
   checksumHandler: {get: function() {
       return checksumHandler;
     }},
@@ -39,6 +45,9 @@ Object.defineProperties(exports, {
   bufferConvertFilter: {get: function() {
       return bufferConvertFilter;
     }},
+  compressHandler: {get: function() {
+      return compressHandler;
+    }},
   chunkedTransformHandler: {get: function() {
       return chunkedTransformHandler;
     }},
@@ -57,6 +66,7 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__buffer_46_js__,
+    $__compress_46_js__,
     $__checksum_46_js__,
     $__chunked_46_js__,
     $__size_46_js__,
@@ -64,26 +74,30 @@ var $__buffer_46_js__,
     $__head_46_js__,
     $__component_46_js__;
 var convertStream = ($__buffer_46_js__ = require("./buffer.js"), $__buffer_46_js__ && $__buffer_46_js__.__esModule && $__buffer_46_js__ || {default: $__buffer_46_js__}).convertStream;
-var $__1 = ($__checksum_46_js__ = require("./checksum.js"), $__checksum_46_js__ && $__checksum_46_js__.__esModule && $__checksum_46_js__ || {default: $__checksum_46_js__}),
-    checksumHandler = $__1.checksumHandler,
-    checksumStream = $__1.checksumStream,
-    checksumStreamable = $__1.checksumStreamable;
-var $__2 = ($__chunked_46_js__ = require("./chunked.js"), $__chunked_46_js__ && $__chunked_46_js__.__esModule && $__chunked_46_js__ || {default: $__chunked_46_js__}),
-    streamToChunkedStream = $__2.streamToChunkedStream,
-    streamToUnchunkedStream = $__2.streamToUnchunkedStream;
+var $__1 = ($__compress_46_js__ = require("./compress.js"), $__compress_46_js__ && $__compress_46_js__.__esModule && $__compress_46_js__ || {default: $__compress_46_js__}),
+    compressStream = $__1.compressStream,
+    compressStreamable = $__1.compressStreamable;
+var $__2 = ($__checksum_46_js__ = require("./checksum.js"), $__checksum_46_js__ && $__checksum_46_js__.__esModule && $__checksum_46_js__ || {default: $__checksum_46_js__}),
+    checksumHandler = $__2.checksumHandler,
+    checksumStream = $__2.checksumStream,
+    checksumStreamable = $__2.checksumStreamable;
+var $__3 = ($__chunked_46_js__ = require("./chunked.js"), $__chunked_46_js__ && $__chunked_46_js__.__esModule && $__chunked_46_js__ || {default: $__chunked_46_js__}),
+    streamToChunkedStream = $__3.streamToChunkedStream,
+    streamToUnchunkedStream = $__3.streamToUnchunkedStream;
 var sizeWindowedStream = ($__size_46_js__ = require("./size.js"), $__size_46_js__ && $__size_46_js__.__esModule && $__size_46_js__ || {default: $__size_46_js__}).sizeWindowedStream;
-var $__4 = ($__stream_46_js__ = require("./stream.js"), $__stream_46_js__ && $__stream_46_js__.__esModule && $__stream_46_js__ || {default: $__stream_46_js__}),
-    convertStreamable = $__4.convertStreamable,
-    streamConvertFilter = $__4.streamConvertFilter;
-var $__5 = ($__head_46_js__ = require("./head.js"), $__head_46_js__ && $__head_46_js__.__esModule && $__head_46_js__ || {default: $__head_46_js__}),
-    extractStreamHead = $__5.extractStreamHead,
-    extractFixedStreamHead = $__5.extractFixedStreamHead;
-var $__6 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
-    bufferConvertHandler = $__6.bufferConvertHandler,
-    bufferConvertFilter = $__6.bufferConvertFilter,
-    chunkedTransformHandler = $__6.chunkedTransformHandler,
-    unchunkedTransformHandler = $__6.unchunkedTransformHandler,
-    headerExtractFilter = $__6.headerExtractFilter,
-    throttledStreamFilter = $__6.throttledStreamFilter,
-    timeoutStreamFilter = $__6.timeoutStreamFilter;
+var $__5 = ($__stream_46_js__ = require("./stream.js"), $__stream_46_js__ && $__stream_46_js__.__esModule && $__stream_46_js__ || {default: $__stream_46_js__}),
+    convertStreamable = $__5.convertStreamable,
+    streamConvertFilter = $__5.streamConvertFilter;
+var $__6 = ($__head_46_js__ = require("./head.js"), $__head_46_js__ && $__head_46_js__.__esModule && $__head_46_js__ || {default: $__head_46_js__}),
+    extractStreamHead = $__6.extractStreamHead,
+    extractFixedStreamHead = $__6.extractFixedStreamHead;
+var $__7 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+    bufferConvertHandler = $__7.bufferConvertHandler,
+    bufferConvertFilter = $__7.bufferConvertFilter,
+    compressHandler = $__7.compressHandler,
+    chunkedTransformHandler = $__7.chunkedTransformHandler,
+    unchunkedTransformHandler = $__7.unchunkedTransformHandler,
+    headerExtractFilter = $__7.headerExtractFilter,
+    throttledStreamFilter = $__7.throttledStreamFilter,
+    timeoutStreamFilter = $__7.timeoutStreamFilter;
 ;

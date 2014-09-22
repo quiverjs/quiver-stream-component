@@ -21,12 +21,17 @@ describe('stream checksum test', () => {
     var main = checksumHandler('sha1')
     var handler = yield main.loadHandler({})
 
+    var testChecksum = '648a6a6ffffdaa0badb23b8baf90b6168dd16b3a'
+
     var streamable = buffersToStreamable([
       'Hello ', 'World\n'
     ])
 
     yield handler({}, streamable)
       .should.eventually.equal(
-        '648a6a6ffffdaa0badb23b8baf90b6168dd16b3a')
+        testChecksum)
+
+    should.exist(streamable['checksum-sha1'])
+    streamable['checksum-sha1'].should.equal(testChecksum)
   }))
 })
