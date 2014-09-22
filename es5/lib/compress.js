@@ -34,8 +34,15 @@ var compressorTable = {
   inflate: zlib.createInflate,
   unzip: zlib.createUnzip
 };
+var compressFieldTable = {
+  gzip: 'toGzipStreamable',
+  gunzip: 'toGunzipStreamable',
+  deflate: 'toDeflateStreamable',
+  inflate: 'toInflateStreamable',
+  unzip: 'toUnzipStreamable'
+};
 var compressField = (function(algorithm) {
-  return 'to' + algorithm[0].toUpperCase() + algorithm.slice(1) + 'Streamable';
+  return compressFieldTable[algorithm];
 });
 var pipeNodeTransform = (function(readStream, nodeStream) {
   var writeStream = nodeToQuiverWriteStream(nodeStream);
@@ -51,7 +58,7 @@ var compressStream = (function(algorithm, readStream) {
   return pipeNodeTransform(readStream, compressor);
 });
 var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $__3(algorithm, streamable) {
-  var toCompressStream,
+  var toCompressStreamable,
       readStream,
       compressedStream,
       compressedStreamable;
@@ -60,14 +67,14 @@ var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $_
     while (true)
       switch ($ctx.state) {
         case 0:
-          toCompressStream = $arguments[2] !== (void 0) ? $arguments[2] : compressField(algorithm);
+          toCompressStreamable = $arguments[2] !== (void 0) ? $arguments[2] : compressField(algorithm);
           $ctx.state = 14;
           break;
         case 14:
-          $ctx.state = (streamable[toCompressStream]) ? 1 : 2;
+          $ctx.state = (streamable[toCompressStreamable]) ? 1 : 2;
           break;
         case 1:
-          $ctx.returnValue = streamable[toCompressStream]();
+          $ctx.returnValue = streamable[toCompressStreamable]();
           $ctx.state = -2;
           break;
         case 2:
@@ -90,7 +97,7 @@ var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $_
           break;
         case 9:
           compressedStreamable = reuseStream(compressedStream);
-          streamable[toCompressStream] = (function() {
+          streamable[toCompressStreamable] = (function() {
             return resolve(compressedStreamable);
           });
           $ctx.state = 18;
