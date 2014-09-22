@@ -18,10 +18,13 @@ var $__zlib__,
     $__quiver_45_promise__,
     $__quiver_45_stream_45_util__;
 var zlib = ($__zlib__ = require("zlib"), $__zlib__ && $__zlib__.__esModule && $__zlib__ || {default: $__zlib__}).default;
-var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
+var $__1 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+    async = $__1.async,
+    resolve = $__1.resolve;
 var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
     pipeStream = $__2.pipeStream,
     reuseStream = $__2.reuseStream,
+    streamToStreamable = $__2.streamToStreamable,
     nodeToQuiverReadStream = $__2.nodeToQuiverReadStream,
     nodeToQuiverWriteStream = $__2.nodeToQuiverWriteStream;
 var compressorTable = {
@@ -32,7 +35,7 @@ var compressorTable = {
   unzip: zlib.createUnzip
 };
 var compressField = (function(algorithm) {
-  return 'to' + algorithm[0].toUpperCase() + algorithm.slice(1) + 'Stream';
+  return 'to' + algorithm[0].toUpperCase() + algorithm.slice(1) + 'Streamable';
 });
 var pipeNodeTransform = (function(readStream, nodeStream) {
   var writeStream = nodeToQuiverWriteStream(nodeStream);
@@ -82,18 +85,18 @@ var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $_
           $ctx.state = (!streamable.reusable) ? 8 : 9;
           break;
         case 8:
-          $ctx.returnValue = compressedStream;
+          $ctx.returnValue = streamToStreamable(compressedStream);
           $ctx.state = -2;
           break;
         case 9:
           compressedStreamable = reuseStream(compressedStream);
           streamable[toCompressStream] = (function() {
-            return compressedStreamable.toStream();
+            return resolve(compressedStreamable);
           });
           $ctx.state = 18;
           break;
         case 18:
-          $ctx.returnValue = compressedStreamable.toStream();
+          $ctx.returnValue = compressedStreamable;
           $ctx.state = -2;
           break;
         default:

@@ -73,7 +73,7 @@ var compressHandler = (function(algorithm) {
     throw new Error('invalid compression algorithm');
   var field = compressField(algorithm);
   return streamHandler((function(args, inputStreamable) {
-    return compressStreamable(algorithm, inputStreamable, field).then(streamToStreamable);
+    return compressStreamable(algorithm, inputStreamable, field);
   }));
 });
 var chunkedTransformHandler = simpleHandler((function(args, inputStream) {

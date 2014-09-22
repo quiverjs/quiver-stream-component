@@ -45,9 +45,11 @@ describe('compress stream test', () => {
     should.equal(buffertools.compare(
       resultBuffer, compressed), 0)
 
-    should.exist(inputStreamable.toGzipStream)
+    should.exist(inputStreamable.toGzipStreamable)
 
-    var cachedBuffer= yield inputStreamable.toGzipStream()
+    var cachedStreamable = yield inputStreamable.toGzipStreamable()
+    
+    var cachedBuffer = yield cachedStreamable.toStream()
       .then(streamToBuffer)
 
     should.equal(buffertools.compare(

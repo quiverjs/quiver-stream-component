@@ -37,6 +37,7 @@ describe('compress stream test', (function() {
         gzipHandler,
         inputStreamable,
         resultBuffer,
+        cachedStreamable,
         cachedBuffer,
         main,
         handler;
@@ -59,9 +60,9 @@ describe('compress stream test', (function() {
             break;
           case 8:
             uncompressed.toString().should.equal(testContent);
-            $ctx.state = 30;
+            $ctx.state = 34;
             break;
-          case 30:
+          case 34:
             $ctx.state = 10;
             return loadStreamHandler({}, compressHandler('gzip'));
           case 10:
@@ -70,9 +71,9 @@ describe('compress stream test', (function() {
             break;
           case 12:
             inputStreamable = textToStreamable(testContent);
-            $ctx.state = 32;
+            $ctx.state = 36;
             break;
-          case 32:
+          case 36:
             $ctx.state = 14;
             return gzipHandler({}, inputStreamable).then(streamableToBuffer);
           case 14:
@@ -81,34 +82,41 @@ describe('compress stream test', (function() {
             break;
           case 16:
             should.equal(buffertools.compare(resultBuffer, compressed), 0);
-            should.exist(inputStreamable.toGzipStream);
-            $ctx.state = 34;
+            should.exist(inputStreamable.toGzipStreamable);
+            $ctx.state = 38;
             break;
-          case 34:
+          case 38:
             $ctx.state = 18;
-            return inputStreamable.toGzipStream().then(streamToBuffer);
+            return inputStreamable.toGzipStreamable();
           case 18:
-            cachedBuffer = $ctx.sent;
+            cachedStreamable = $ctx.sent;
             $ctx.state = 20;
             break;
           case 20:
+            $ctx.state = 22;
+            return cachedStreamable.toStream().then(streamToBuffer);
+          case 22:
+            cachedBuffer = $ctx.sent;
+            $ctx.state = 24;
+            break;
+          case 24:
             should.equal(buffertools.compare(resultBuffer, compressed), 0);
             main = simpleHandler((function(args) {
               return testContent;
             }), 'void', 'text').addMiddleware(transformFilter(compressHandler('gzip'), 'out')).addMiddleware(transformFilter(compressHandler('gunzip'), 'out'));
-            $ctx.state = 36;
+            $ctx.state = 40;
             break;
-          case 36:
-            $ctx.state = 22;
-            return main.loadHandler({});
-          case 22:
-            handler = $ctx.sent;
-            $ctx.state = 24;
-            break;
-          case 24:
+          case 40:
             $ctx.state = 26;
-            return handler().should.eventually.equal(testContent);
+            return main.loadHandler({});
           case 26:
+            handler = $ctx.sent;
+            $ctx.state = 28;
+            break;
+          case 28:
+            $ctx.state = 30;
+            return handler().should.eventually.equal(testContent);
+          case 30:
             $ctx.maybeThrow();
             $ctx.state = -2;
             break;
