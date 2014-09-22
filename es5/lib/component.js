@@ -77,10 +77,10 @@ var headerExtractFilter = (function(separator) {
     return (function(args, inputStreamable) {
       return inputStreamable.toStream.then((function(readStream) {
         return extractStreamHead(readStream, separator, extractOptions);
-      })).then((function($__8) {
-        var $__10 = $__8,
-            header = $__10[0],
-            readStream = $__10[1];
+      })).then((function($__10) {
+        var $__11 = $__10,
+            header = $__11[0],
+            readStream = $__11[1];
         args.header = header;
         var streamable = streamToStreamable(readStream);
         return handler(args, streamable);
@@ -91,9 +91,9 @@ var headerExtractFilter = (function(separator) {
 var throttledStreamFilter = (function() {
   var mode = arguments[0] !== (void 0) ? arguments[0] : 'inout';
   var converterBuilder = (function(config) {
-    var $__8;
-    var $__9 = config,
-        streamThrottleRate = ($__8 = $__9.streamThrottleRate) === void 0 ? -1 : $__8;
+    var $__9;
+    var $__8 = config,
+        streamThrottleRate = ($__9 = $__8.streamThrottleRate) === void 0 ? -1 : $__9;
     if (!(streamThrottleRate > 0))
       return null;
     return (function(readStream) {

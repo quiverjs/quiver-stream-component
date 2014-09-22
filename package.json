@@ -6,24 +6,22 @@
   },
   "name": "quiver-stream-component",
   "desription": "Components for stream manipulation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "homepage": "https://github.com/quiverjs/file-component",
   "repository": {
     "url": "git@github.com:quiverjs/file-component.git"
   },
   "dependencies": {
-    "traceur": "~0.0.60",
+    "traceur": "~0.0.65",
     "buffertools": "~2.1.2",
     "quiver-error": "~0.1.1",
-    "quiver-promise": "~0.1.0",
-    "quiver-component": "~1.1.0",
-    "quiver-stream-util": "~1.1.3"
+    "quiver-promise": "~0.1.2",
+    "quiver-component": "~1.1.4",
+    "quiver-stream-util": "~1.1.4"
   },
   "devDependencies": {
     "chai": "^1.9.1",
-    "gulp": "^3.8.7",
     "mocha": "^1.21.4",
-    "gulp-traceur": "^0.13.0",
     "chai-as-promised": "^4.1.1"
   },
   "bugs": {

@@ -19,16 +19,16 @@ var $__1 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_pro
     async = $__1.async,
     reject = $__1.reject;
 var simpleHandlerBuilder = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}).simpleHandlerBuilder;
-var checksumStream = async($traceurRuntime.initGeneratorFunction(function $__4(readStream, algorithm) {
+var checksumStream = async($traceurRuntime.initGeneratorFunction(function $__5(readStream, algorithm) {
   var checksum,
-      $__3,
+      $__4,
       closed,
       data,
-      $__5,
       $__6,
       $__7,
       $__8,
-      $__9;
+      $__9,
+      $__10;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -40,23 +40,23 @@ var checksumStream = async($traceurRuntime.initGeneratorFunction(function $__4(r
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__5 = readStream.read;
-          $__6 = $__5.call(readStream);
+          $__6 = readStream.read;
+          $__7 = $__6.call(readStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__6;
+          return $__7;
         case 2:
-          $__7 = $ctx.sent;
+          $__8 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__3 = $__7;
-          $__8 = $__3.closed;
-          closed = $__8;
-          $__9 = $__3.data;
-          data = $__9;
+          $__4 = $__8;
+          $__9 = $__4.closed;
+          closed = $__9;
+          $__10 = $__4.data;
+          data = $__10;
           $ctx.state = 8;
           break;
         case 8:
@@ -73,7 +73,7 @@ var checksumStream = async($traceurRuntime.initGeneratorFunction(function $__4(r
         default:
           return $ctx.end();
       }
-  }, $__4, this);
+  }, $__5, this);
 }));
 var checksumHandler = (function(algorithm) {
   if (typeof algorithm != 'string')
@@ -82,16 +82,16 @@ var checksumHandler = (function(algorithm) {
   return simpleHandlerBuilder((function(config) {
     if (getHashes().indexOf(algorithm) == -1)
       return reject(error(500, 'platform do not ' + 'support checksum algorithm ' + algorithm));
-    return async($traceurRuntime.initGeneratorFunction(function $__10(args, streamable) {
+    return async($traceurRuntime.initGeneratorFunction(function $__11(args, streamable) {
       var readStream;
       return $traceurRuntime.createGeneratorInstance(function($ctx) {
         while (true)
           switch ($ctx.state) {
             case 0:
-              $ctx.state = (streamable[$traceurRuntime.toProperty(checksumField)]) ? 1 : 2;
+              $ctx.state = (streamable[checksumField]) ? 1 : 2;
               break;
             case 1:
-              $ctx.returnValue = streamable[$traceurRuntime.toProperty(checksumField)];
+              $ctx.returnValue = streamable[checksumField];
               $ctx.state = -2;
               break;
             case 2:
@@ -108,7 +108,7 @@ var checksumHandler = (function(algorithm) {
             default:
               return $ctx.end();
           }
-      }, $__10, this);
+      }, $__11, this);
     }));
   }), 'streamable', 'text');
 });

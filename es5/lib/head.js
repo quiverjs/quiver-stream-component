@@ -17,13 +17,14 @@ var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_pr
 var pushbackStream = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).pushbackStream;
 var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
 var indexOf = buffertools.indexOf;
-var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__6(readStream, separator) {
-  var $__5,
+var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__8(readStream, separator) {
+  var $__6,
       options,
-      $__4,
+      $__5,
       maxLength,
       limit,
       headBuffer,
+      $__7,
       closed,
       data,
       previousBufferSize,
@@ -31,18 +32,18 @@ var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__
       headContent,
       restIndex,
       restBuffer,
-      $__7,
-      $__8,
       $__9,
       $__10,
-      $__11;
+      $__11,
+      $__12,
+      $__13;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
         case 0:
           options = $arguments[2] !== (void 0) ? $arguments[2] : {};
-          $__4 = options, maxLength = ($__5 = $__4.maxLength) === void 0 ? -1 : $__5;
+          $__5 = options, maxLength = ($__6 = $__5.maxLength) === void 0 ? -1 : $__6;
           limit = maxLength > 0;
           if (!Buffer.isBuffer(separator))
             separator = new Buffer(separator);
@@ -53,23 +54,23 @@ var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__7 = readStream.read;
-          $__8 = $__7.call(readStream);
+          $__9 = readStream.read;
+          $__10 = $__9.call(readStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__8;
+          return $__10;
         case 2:
-          $__9 = $ctx.sent;
+          $__11 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__4 = $__9;
-          $__10 = $__4.closed;
-          closed = $__10;
-          $__11 = $__4.data;
-          data = $__11;
+          $__7 = $__11;
+          $__12 = $__7.closed;
+          closed = $__12;
+          $__13 = $__7.data;
+          data = $__13;
           $ctx.state = 8;
           break;
         case 8:
@@ -112,20 +113,20 @@ var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__
         default:
           return $ctx.end();
       }
-  }, $__6, this);
+  }, $__8, this);
 }));
-var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(function $__12(readStream, size) {
+var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(function $__14(readStream, size) {
   var remaining,
       headBuffers,
       $__5,
       closed,
       data,
       bufferSize,
-      $__13,
-      $__14,
       $__15,
       $__16,
-      $__17;
+      $__17,
+      $__18,
+      $__19;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -138,23 +139,23 @@ var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(functio
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__13 = readStream.read;
-          $__14 = $__13.call(readStream);
+          $__15 = readStream.read;
+          $__16 = $__15.call(readStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__14;
+          return $__16;
         case 2:
-          $__15 = $ctx.sent;
+          $__17 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__5 = $__15;
-          $__16 = $__5.closed;
-          closed = $__16;
-          $__17 = $__5.data;
-          data = $__17;
+          $__5 = $__17;
+          $__18 = $__5.closed;
+          closed = $__18;
+          $__19 = $__5.data;
+          data = $__19;
           $ctx.state = 8;
           break;
         case 8:
@@ -202,5 +203,5 @@ var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(functio
         default:
           return $ctx.end();
       }
-  }, $__12, this);
+  }, $__14, this);
 }));

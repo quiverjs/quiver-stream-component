@@ -1,5 +1,5 @@
 "use strict";
-var $__traceur_64_0_46_0_46_58__,
+var $__traceur_64_0_46_0_46_6__,
     $__quiver_45_promise__,
     $__quiver_45_component__,
     $__quiver_45_stream_45_util__,
@@ -7,7 +7,7 @@ var $__traceur_64_0_46_0_46_58__,
     $___46__46__47_lib_47_component_46_js__,
     $__chai__,
     $__chai_45_as_45_promised__;
-($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var $__1 = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}),
     simpleHandler = $__1.simpleHandler,
@@ -24,17 +24,18 @@ var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"),
 chai.use(chaiAsPromised);
 var should = chai.should();
 describe('timeout stream test', (function() {
-  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__8() {
+  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__9() {
     var $__7,
         readStream,
         writeStream,
+        $__8,
         closed,
         data,
-        $__9,
         $__10,
         $__11,
         $__12,
-        $__13;
+        $__13,
+        $__14;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -45,23 +46,23 @@ describe('timeout stream test', (function() {
             $ctx.state = 14;
             break;
           case 14:
-            $__9 = readStream.read;
-            $__10 = $__9.call(readStream);
+            $__10 = readStream.read;
+            $__11 = $__10.call(readStream);
             $ctx.state = 6;
             break;
           case 6:
             $ctx.state = 2;
-            return $__10;
+            return $__11;
           case 2:
-            $__11 = $ctx.sent;
+            $__12 = $ctx.sent;
             $ctx.state = 4;
             break;
           case 4:
-            $__7 = $__11;
-            $__12 = $__7.closed;
-            closed = $__12;
-            $__13 = $__7.data;
-            data = $__13;
+            $__8 = $__12;
+            $__13 = $__8.closed;
+            closed = $__13;
+            $__14 = $__8.data;
+            data = $__14;
             $ctx.state = 8;
             break;
           case 8:
@@ -78,9 +79,9 @@ describe('timeout stream test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__8, this);
+    }, $__9, this);
   })));
-  it('timeout filter test', async($traceurRuntime.initGeneratorFunction(function $__14() {
+  it('timeout filter test', async($traceurRuntime.initGeneratorFunction(function $__15() {
     var component,
         handler,
         $__7,
@@ -126,6 +127,6 @@ describe('timeout stream test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__14, this);
+    }, $__15, this);
   })));
 }));

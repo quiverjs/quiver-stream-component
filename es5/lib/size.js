@@ -12,17 +12,16 @@ var $__quiver_45_promise__,
     $__quiver_45_stream_45_util__;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var createChannel = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).createChannel;
-var pipeSizedBuffer = async($traceurRuntime.initGeneratorFunction(function $__3(readStream, writeStream, minSize, maxSize) {
+var pipeSizedBuffer = async($traceurRuntime.initGeneratorFunction(function $__4(readStream, writeStream, minSize, maxSize) {
   var buffer,
       closed,
-      $__2,
+      $__3,
       data,
       bufferLength,
       division,
       sliceStartIndex,
       sliceEndIndex,
       slice,
-      $__4,
       $__5,
       $__6,
       $__7,
@@ -31,6 +30,7 @@ var pipeSizedBuffer = async($traceurRuntime.initGeneratorFunction(function $__3(
       $__10,
       $__11,
       $__12,
+      $__13,
       err;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
@@ -47,20 +47,20 @@ var pipeSizedBuffer = async($traceurRuntime.initGeneratorFunction(function $__3(
           $ctx.state = (true) ? 5 : 30;
           break;
         case 5:
-          $__4 = writeStream.prepareWrite;
-          $__5 = $__4.call(writeStream);
+          $__5 = writeStream.prepareWrite;
+          $__6 = $__5.call(writeStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__5;
+          return $__6;
         case 2:
-          $__6 = $ctx.sent;
+          $__7 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__7 = $__6.closed;
-          closed = $__7;
+          $__8 = $__7.closed;
+          closed = $__8;
           $ctx.state = 8;
           break;
         case 8:
@@ -74,23 +74,23 @@ var pipeSizedBuffer = async($traceurRuntime.initGeneratorFunction(function $__3(
           $ctx.state = (!buffer || buffer.length < minSize) ? 16 : 27;
           break;
         case 16:
-          $__8 = readStream.read;
-          $__9 = $__8.call(readStream);
+          $__9 = readStream.read;
+          $__10 = $__9.call(readStream);
           $ctx.state = 17;
           break;
         case 17:
           $ctx.state = 13;
-          return $__9;
+          return $__10;
         case 13:
-          $__10 = $ctx.sent;
+          $__11 = $ctx.sent;
           $ctx.state = 15;
           break;
         case 15:
-          $__2 = $__10;
-          $__11 = $__2.closed;
-          closed = $__11;
-          $__12 = $__2.data;
-          data = $__12;
+          $__3 = $__11;
+          $__12 = $__3.closed;
+          closed = $__12;
+          $__13 = $__3.data;
+          data = $__13;
           $ctx.state = 19;
           break;
         case 19:
@@ -158,7 +158,7 @@ var pipeSizedBuffer = async($traceurRuntime.initGeneratorFunction(function $__3(
         default:
           return $ctx.end();
       }
-  }, $__3, this);
+  }, $__4, this);
 }));
 var sizeWindowedStream = (function(rawStream, minSize) {
   var maxSize = arguments[2] !== (void 0) ? arguments[2] : minSize;
