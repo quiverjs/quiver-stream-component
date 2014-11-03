@@ -28,32 +28,32 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_component__,
     $__quiver_45_stream_45_util__,
-    $__buffer_46_js__,
-    $__stream_46_js__,
-    $__compress_46_js__,
-    $__chunked_46_js__,
-    $__head_46_js__,
-    $__throttle_46_js__,
-    $__timeout_46_js__;
+    $__buffer__,
+    $__stream__,
+    $__compress__,
+    $__chunked__,
+    $__head__,
+    $__throttle__,
+    $__timeout__;
 var $__0 = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}),
     simpleHandler = $__0.simpleHandler,
     streamHandler = $__0.streamHandler,
     streamFilter = $__0.streamFilter;
 var streamToStreamable = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).streamToStreamable;
-var $__2 = ($__buffer_46_js__ = require("./buffer.js"), $__buffer_46_js__ && $__buffer_46_js__.__esModule && $__buffer_46_js__ || {default: $__buffer_46_js__}),
+var $__2 = ($__buffer__ = require("./buffer"), $__buffer__ && $__buffer__.__esModule && $__buffer__ || {default: $__buffer__}),
     convertStream = $__2.convertStream,
     bufferizeStreamable = $__2.bufferizeStreamable;
-var streamConvertFilter = ($__stream_46_js__ = require("./stream.js"), $__stream_46_js__ && $__stream_46_js__.__esModule && $__stream_46_js__ || {default: $__stream_46_js__}).streamConvertFilter;
-var $__4 = ($__compress_46_js__ = require("./compress.js"), $__compress_46_js__ && $__compress_46_js__.__esModule && $__compress_46_js__ || {default: $__compress_46_js__}),
+var streamConvertFilter = ($__stream__ = require("./stream"), $__stream__ && $__stream__.__esModule && $__stream__ || {default: $__stream__}).streamConvertFilter;
+var $__4 = ($__compress__ = require("./compress"), $__compress__ && $__compress__.__esModule && $__compress__ || {default: $__compress__}),
     compressField = $__4.compressField,
     compressorTable = $__4.compressorTable,
     compressStreamable = $__4.compressStreamable;
-var $__5 = ($__chunked_46_js__ = require("./chunked.js"), $__chunked_46_js__ && $__chunked_46_js__.__esModule && $__chunked_46_js__ || {default: $__chunked_46_js__}),
+var $__5 = ($__chunked__ = require("./chunked"), $__chunked__ && $__chunked__.__esModule && $__chunked__ || {default: $__chunked__}),
     streamToChunkedStream = $__5.streamToChunkedStream,
     streamToUnchunkedStream = $__5.streamToUnchunkedStream;
-var extractStreamHead = ($__head_46_js__ = require("./head.js"), $__head_46_js__ && $__head_46_js__.__esModule && $__head_46_js__ || {default: $__head_46_js__}).extractStreamHead;
-var throttledStream = ($__throttle_46_js__ = require("./throttle.js"), $__throttle_46_js__ && $__throttle_46_js__.__esModule && $__throttle_46_js__ || {default: $__throttle_46_js__}).throttledStream;
-var timeoutStream = ($__timeout_46_js__ = require("./timeout.js"), $__timeout_46_js__ && $__timeout_46_js__.__esModule && $__timeout_46_js__ || {default: $__timeout_46_js__}).timeoutStream;
+var extractStreamHead = ($__head__ = require("./head"), $__head__ && $__head__.__esModule && $__head__ || {default: $__head__}).extractStreamHead;
+var throttledStream = ($__throttle__ = require("./throttle"), $__throttle__ && $__throttle__.__esModule && $__throttle__ || {default: $__throttle__}).throttledStream;
+var timeoutStream = ($__timeout__ = require("./timeout"), $__timeout__ && $__timeout__.__esModule && $__timeout__ || {default: $__timeout__}).timeoutStream;
 var bufferConvertHandler = (function(converter) {
   return simpleHandler((function(args, inputStream) {
     return convertStream(converter, inputStream);

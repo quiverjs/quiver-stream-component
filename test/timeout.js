@@ -13,11 +13,11 @@ import {
 
 import {
   timeoutStream
-} from '../lib/timeout.js'
+} from '../lib/timeout'
 
 import {
   timeoutStreamFilter
-} from '../lib/component.js'
+} from '../lib/component'
 
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'

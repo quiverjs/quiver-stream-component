@@ -7,7 +7,7 @@ import {
   streamToBuffers
 } from 'quiver-stream-util'
 
-import { throttledStream } from '../lib/throttle.js'
+import { throttledStream } from '../lib/throttle'
 
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'

@@ -8,7 +8,7 @@ import {
 
 import { 
   streamToChunkedStream, streamToUnchunkedStream 
-} from '../lib/stream-component.js'
+} from '../lib/stream-component'
 
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'

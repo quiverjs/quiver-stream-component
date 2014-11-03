@@ -12,7 +12,7 @@ var $__quiver_45_error__,
     $__quiver_45_promise__,
     $__buffertools__,
     $__quiver_45_stream_45_util__,
-    $__head_46_js__;
+    $__head__;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
@@ -22,7 +22,7 @@ var $__5 = buffertools,
 var $__3 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
     createChannel = $__3.createChannel,
     pushbackStream = $__3.pushbackStream;
-var $__4 = ($__head_46_js__ = require("./head.js"), $__head_46_js__ && $__head_46_js__.__esModule && $__head_46_js__ || {default: $__head_46_js__}),
+var $__4 = ($__head__ = require("./head"), $__head__ && $__head__.__esModule && $__head__ || {default: $__head__}),
     extractStreamHead = $__4.extractStreamHead,
     extractFixedStreamHead = $__4.extractFixedStreamHead;
 var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__8(readStream, writeStream) {

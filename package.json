@@ -6,27 +6,26 @@
   },
   "name": "quiver-stream-component",
   "desription": "Components for stream manipulation",
-  "version": "1.0.5",
+  "version": "1.2.0",
   "homepage": "https://github.com/quiverjs/file-component",
   "repository": {
     "url": "git@github.com:quiverjs/file-component.git"
   },
   "dependencies": {
-    "traceur": "~0.0.65",
-    "buffertools": "~2.1.2",
+    "traceur": "0.0.72",
+    "buffertools": "^2.1.2",
     "quiver-error": "~0.1.1",
-    "quiver-promise": "~0.1.2",
-    "quiver-component": "~1.1.4",
-    "quiver-stream-util": "~1.1.4"
+    "quiver-promise": "~0.2.0",
+    "quiver-component": "~1.2.0",
+    "quiver-stream-util": "~1.2.0"
   },
   "devDependencies": {
-    "chai": "^1.9.1",
-    "mocha": "^1.21.4",
+    "chai": "^1.9.2",
+    "mocha": "^2.0.1",
     "chai-as-promised": "^4.1.1"
   },
   "bugs": {
-    "url": "https://github.com/quiverjs/stream-component/issues",
-    "email": "quiver@quiverjs.org"
+    "url": "https://github.com/quiverjs/stream-component/issues"
   },
   "licenses": {
     "type": "MIT",
@@ -34,6 +33,11 @@
   },
   "main": "./index.js",
   "scripts": {
-    "test": "make test"
+    "test": "mocha es5/test",
+    "pretest": "npm run build",
+    "prepublish": "npm run build",
+    "build": "npm run build-lib && npm run build-test",
+    "build-lib": "traceur --dir lib es5/lib --modules commonjs",
+    "build-test": "traceur --dir test es5/test --modules commonjs"
   }
 }

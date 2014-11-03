@@ -1,16 +1,16 @@
 "use strict";
-var $__traceur_64_0_46_0_46_6__,
+var $__traceur_64_0_46_0_46_7__,
     $__quiver_45_promise__,
     $__quiver_45_stream_45_util__,
-    $___46__46__47_lib_47_stream_45_component_46_js__,
+    $___46__46__47_lib_47_stream_45_component__,
     $__chai__,
     $__chai_45_as_45_promised__;
-($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
+($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var $__1 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
     streamToText = $__1.streamToText,
     buffersToStream = $__1.buffersToStream;
-var $__2 = ($___46__46__47_lib_47_stream_45_component_46_js__ = require("../lib/stream-component.js"), $___46__46__47_lib_47_stream_45_component_46_js__ && $___46__46__47_lib_47_stream_45_component_46_js__.__esModule && $___46__46__47_lib_47_stream_45_component_46_js__ || {default: $___46__46__47_lib_47_stream_45_component_46_js__}),
+var $__2 = ($___46__46__47_lib_47_stream_45_component__ = require("../lib/stream-component"), $___46__46__47_lib_47_stream_45_component__ && $___46__46__47_lib_47_stream_45_component__.__esModule && $___46__46__47_lib_47_stream_45_component__ || {default: $___46__46__47_lib_47_stream_45_component__}),
     extractStreamHead = $__2.extractStreamHead,
     extractFixedStreamHead = $__2.extractFixedStreamHead;
 var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
