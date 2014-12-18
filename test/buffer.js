@@ -61,9 +61,9 @@ describe('buffer convert test', () => {
 
       return 'Hello, ' + name
     }, 'text', 'text')
-    .addMiddleware(bufferConvertFilter(
+    .middleware(bufferConvertFilter(
       toUpperCase, 'in'))
-    .addMiddleware(bufferConvertFilter(
+    .middleware(bufferConvertFilter(
       toLowerCase, 'out'))
 
     var handler = yield component.loadHandler({})

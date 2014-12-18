@@ -58,9 +58,9 @@ describe('compress stream test', () => {
     var main = simpleHandler(
       args => testContent, 
       'void', 'text')
-      .addMiddleware(transformFilter(
+      .middleware(transformFilter(
         compressHandler('gzip'), 'out'))
-      .addMiddleware(transformFilter(
+      .middleware(transformFilter(
         compressHandler('gunzip'), 'out'))
 
     var handler = yield main.loadHandler({})

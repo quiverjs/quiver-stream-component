@@ -103,7 +103,7 @@ describe('compress stream test', (function() {
             should.equal(buffertools.compare(resultBuffer, compressed), 0);
             main = simpleHandler((function(args) {
               return testContent;
-            }), 'void', 'text').addMiddleware(transformFilter(compressHandler('gzip'), 'out')).addMiddleware(transformFilter(compressHandler('gunzip'), 'out'));
+            }), 'void', 'text').middleware(transformFilter(compressHandler('gzip'), 'out')).middleware(transformFilter(compressHandler('gunzip'), 'out'));
             $ctx.state = 40;
             break;
           case 40:

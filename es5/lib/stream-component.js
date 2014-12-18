@@ -1,67 +1,67 @@
 "use strict";
 Object.defineProperties(exports, {
   convertStream: {get: function() {
-      return convertStream;
-    }},
-  streamToChunkedStream: {get: function() {
-      return streamToChunkedStream;
-    }},
-  streamToUnchunkedStream: {get: function() {
-      return streamToUnchunkedStream;
-    }},
-  convertStreamable: {get: function() {
-      return convertStreamable;
-    }},
-  streamConvertFilter: {get: function() {
-      return streamConvertFilter;
+      return $__buffer__.convertStream;
     }},
   compressStream: {get: function() {
-      return compressStream;
+      return $__compress__.compressStream;
     }},
   compressStreamable: {get: function() {
-      return compressStreamable;
+      return $__compress__.compressStreamable;
     }},
   checksumHandler: {get: function() {
-      return checksumHandler;
+      return $__checksum__.checksumHandler;
     }},
   checksumStream: {get: function() {
-      return checksumStream;
+      return $__checksum__.checksumStream;
     }},
   checksumStreamable: {get: function() {
-      return checksumStreamable;
+      return $__checksum__.checksumStreamable;
+    }},
+  streamToChunkedStream: {get: function() {
+      return $__chunked__.streamToChunkedStream;
+    }},
+  streamToUnchunkedStream: {get: function() {
+      return $__chunked__.streamToUnchunkedStream;
     }},
   sizeWindowedStream: {get: function() {
-      return sizeWindowedStream;
+      return $__size__.sizeWindowedStream;
+    }},
+  convertStreamable: {get: function() {
+      return $__stream__.convertStreamable;
+    }},
+  streamConvertFilter: {get: function() {
+      return $__stream__.streamConvertFilter;
     }},
   extractStreamHead: {get: function() {
-      return extractStreamHead;
+      return $__head__.extractStreamHead;
     }},
   extractFixedStreamHead: {get: function() {
-      return extractFixedStreamHead;
+      return $__head__.extractFixedStreamHead;
     }},
   bufferConvertHandler: {get: function() {
-      return bufferConvertHandler;
+      return $__component__.bufferConvertHandler;
     }},
   bufferConvertFilter: {get: function() {
-      return bufferConvertFilter;
+      return $__component__.bufferConvertFilter;
     }},
   compressHandler: {get: function() {
-      return compressHandler;
+      return $__component__.compressHandler;
     }},
   chunkedTransformHandler: {get: function() {
-      return chunkedTransformHandler;
+      return $__component__.chunkedTransformHandler;
     }},
   unchunkedTransformHandler: {get: function() {
-      return unchunkedTransformHandler;
+      return $__component__.unchunkedTransformHandler;
     }},
   headerExtractFilter: {get: function() {
-      return headerExtractFilter;
+      return $__component__.headerExtractFilter;
     }},
   throttledStreamFilter: {get: function() {
-      return throttledStreamFilter;
+      return $__component__.throttledStreamFilter;
     }},
   timeoutStreamFilter: {get: function() {
-      return timeoutStreamFilter;
+      return $__component__.timeoutStreamFilter;
     }},
   __esModule: {value: true}
 });
@@ -73,31 +73,11 @@ var $__buffer__,
     $__stream__,
     $__head__,
     $__component__;
-var convertStream = ($__buffer__ = require("./buffer"), $__buffer__ && $__buffer__.__esModule && $__buffer__ || {default: $__buffer__}).convertStream;
-var $__1 = ($__compress__ = require("./compress"), $__compress__ && $__compress__.__esModule && $__compress__ || {default: $__compress__}),
-    compressStream = $__1.compressStream,
-    compressStreamable = $__1.compressStreamable;
-var $__2 = ($__checksum__ = require("./checksum"), $__checksum__ && $__checksum__.__esModule && $__checksum__ || {default: $__checksum__}),
-    checksumHandler = $__2.checksumHandler,
-    checksumStream = $__2.checksumStream,
-    checksumStreamable = $__2.checksumStreamable;
-var $__3 = ($__chunked__ = require("./chunked"), $__chunked__ && $__chunked__.__esModule && $__chunked__ || {default: $__chunked__}),
-    streamToChunkedStream = $__3.streamToChunkedStream,
-    streamToUnchunkedStream = $__3.streamToUnchunkedStream;
-var sizeWindowedStream = ($__size__ = require("./size"), $__size__ && $__size__.__esModule && $__size__ || {default: $__size__}).sizeWindowedStream;
-var $__5 = ($__stream__ = require("./stream"), $__stream__ && $__stream__.__esModule && $__stream__ || {default: $__stream__}),
-    convertStreamable = $__5.convertStreamable,
-    streamConvertFilter = $__5.streamConvertFilter;
-var $__6 = ($__head__ = require("./head"), $__head__ && $__head__.__esModule && $__head__ || {default: $__head__}),
-    extractStreamHead = $__6.extractStreamHead,
-    extractFixedStreamHead = $__6.extractFixedStreamHead;
-var $__7 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
-    bufferConvertHandler = $__7.bufferConvertHandler,
-    bufferConvertFilter = $__7.bufferConvertFilter,
-    compressHandler = $__7.compressHandler,
-    chunkedTransformHandler = $__7.chunkedTransformHandler,
-    unchunkedTransformHandler = $__7.unchunkedTransformHandler,
-    headerExtractFilter = $__7.headerExtractFilter,
-    throttledStreamFilter = $__7.throttledStreamFilter,
-    timeoutStreamFilter = $__7.timeoutStreamFilter;
-;
+var $__buffer__ = ($__buffer__ = require("./buffer"), $__buffer__ && $__buffer__.__esModule && $__buffer__ || {default: $__buffer__});
+var $__compress__ = ($__compress__ = require("./compress"), $__compress__ && $__compress__.__esModule && $__compress__ || {default: $__compress__});
+var $__checksum__ = ($__checksum__ = require("./checksum"), $__checksum__ && $__checksum__.__esModule && $__checksum__ || {default: $__checksum__});
+var $__chunked__ = ($__chunked__ = require("./chunked"), $__chunked__ && $__chunked__.__esModule && $__chunked__ || {default: $__chunked__});
+var $__size__ = ($__size__ = require("./size"), $__size__ && $__size__.__esModule && $__size__ || {default: $__size__});
+var $__stream__ = ($__stream__ = require("./stream"), $__stream__ && $__stream__.__esModule && $__stream__ || {default: $__stream__});
+var $__head__ = ($__head__ = require("./head"), $__head__ && $__head__.__esModule && $__head__ || {default: $__head__});
+var $__component__ = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__});

@@ -94,7 +94,7 @@ describe('buffer convert test', (function() {
             component = simpleHandler((function(args, name) {
               name.should.equal('JOHN');
               return 'Hello, ' + name;
-            }), 'text', 'text').addMiddleware(bufferConvertFilter(toUpperCase, 'in')).addMiddleware(bufferConvertFilter(toLowerCase, 'out'));
+            }), 'text', 'text').middleware(bufferConvertFilter(toUpperCase, 'in')).middleware(bufferConvertFilter(toLowerCase, 'out'));
             $ctx.state = 10;
             break;
           case 10:

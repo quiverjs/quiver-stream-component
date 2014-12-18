@@ -43,7 +43,7 @@ describe('timeout stream test', () => {
     var component = simpleHandler(
       (args, name) => 'Hello, ' + name,
       'text', 'text')
-    .addMiddleware(timeoutStreamFilter('in'))
+    .middleware(timeoutStreamFilter('in'))
 
     var handler = yield loadStreamHandler({
       streamTimeout: 100

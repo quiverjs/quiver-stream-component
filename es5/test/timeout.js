@@ -94,7 +94,7 @@ describe('timeout stream test', (function() {
           case 0:
             component = simpleHandler((function(args, name) {
               return 'Hello, ' + name;
-            }), 'text', 'text').addMiddleware(timeoutStreamFilter('in'));
+            }), 'text', 'text').middleware(timeoutStreamFilter('in'));
             $ctx.state = 14;
             break;
           case 14:

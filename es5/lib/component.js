@@ -78,10 +78,10 @@ var compressHandler = (function(algorithm) {
 });
 var chunkedTransformHandler = simpleHandler((function(args, inputStream) {
   return streamToChunkedStream(inputStream);
-}), 'stream', 'stream').privatizedConstructor();
+}), 'stream', 'stream').factory();
 var unchunkedTransformHandler = simpleHandler((function(args, inputStream) {
   return streamToUnchunkedStream(inputStream);
-}), 'stream', 'stream').privatizedConstructor();
+}), 'stream', 'stream').factory();
 var headerExtractFilter = (function(separator) {
   if (!Buffer.isBuffer(separator))
     separator = new Buffer(separator);
