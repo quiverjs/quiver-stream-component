@@ -6,25 +6,33 @@ Object.defineProperties(exports, {
   extractFixedStreamHead: {get: function() {
       return extractFixedStreamHead;
     }},
+  headerExtractFilter: {get: function() {
+      return headerExtractFilter;
+    }},
+  makeHeaderExtractFilter: {get: function() {
+      return makeHeaderExtractFilter;
+    }},
   __esModule: {value: true}
 });
-var $__quiver_45_error__,
-    $__quiver_45_promise__,
-    $__quiver_45_stream_45_util__,
+var $__quiver_45_core_47_error__,
+    $__quiver_45_core_47_promise__,
+    $__quiver_45_core_47_stream_45_util__,
+    $__quiver_45_core_47_component__,
     $__buffertools__;
-var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
-var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
-var pushbackStream = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}).pushbackStream;
+var error = ($__quiver_45_core_47_error__ = require("quiver-core/error"), $__quiver_45_core_47_error__ && $__quiver_45_core_47_error__.__esModule && $__quiver_45_core_47_error__ || {default: $__quiver_45_core_47_error__}).error;
+var async = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}).async;
+var pushbackStream = ($__quiver_45_core_47_stream_45_util__ = require("quiver-core/stream-util"), $__quiver_45_core_47_stream_45_util__ && $__quiver_45_core_47_stream_45_util__.__esModule && $__quiver_45_core_47_stream_45_util__ || {default: $__quiver_45_core_47_stream_45_util__}).pushbackStream;
+var streamFilter = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}).streamFilter;
 var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
 var indexOf = buffertools.indexOf;
-var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__8(readStream, separator) {
-  var $__6,
+var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__11(readStream, separator) {
+  var $__7,
       options,
-      $__5,
+      $__6,
       maxLength,
       limit,
       headBuffer,
-      $__7,
+      $__8,
       closed,
       data,
       previousBufferSize,
@@ -32,18 +40,18 @@ var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__
       headContent,
       restIndex,
       restBuffer,
-      $__9,
-      $__10,
-      $__11,
       $__12,
-      $__13;
+      $__13,
+      $__14,
+      $__15,
+      $__16;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
         case 0:
           options = $arguments[2] !== (void 0) ? $arguments[2] : {};
-          $__5 = options, maxLength = ($__6 = $__5.maxLength) === void 0 ? -1 : $__6;
+          $__6 = options, maxLength = ($__7 = $__6.maxLength) === void 0 ? -1 : $__7;
           limit = maxLength > 0;
           if (!Buffer.isBuffer(separator))
             separator = new Buffer(separator);
@@ -54,23 +62,23 @@ var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__9 = readStream.read;
-          $__10 = $__9.call(readStream);
+          $__12 = readStream.read;
+          $__13 = $__12.call(readStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__10;
+          return $__13;
         case 2:
-          $__11 = $ctx.sent;
+          $__14 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__7 = $__11;
-          $__12 = $__7.closed;
-          closed = $__12;
-          $__13 = $__7.data;
-          data = $__13;
+          $__8 = $__14;
+          $__15 = $__8.closed;
+          closed = $__15;
+          $__16 = $__8.data;
+          data = $__16;
           $ctx.state = 8;
           break;
         case 8:
@@ -113,20 +121,20 @@ var extractStreamHead = async($traceurRuntime.initGeneratorFunction(function $__
         default:
           return $ctx.end();
       }
-  }, $__8, this);
+  }, $__11, this);
 }));
-var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(function $__14(readStream, size) {
+var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(function $__17(readStream, size) {
   var remaining,
       headBuffers,
-      $__5,
+      $__6,
       closed,
       data,
       bufferSize,
-      $__15,
-      $__16,
-      $__17,
       $__18,
-      $__19;
+      $__19,
+      $__20,
+      $__21,
+      $__22;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -139,23 +147,23 @@ var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(functio
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__15 = readStream.read;
-          $__16 = $__15.call(readStream);
+          $__18 = readStream.read;
+          $__19 = $__18.call(readStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__16;
+          return $__19;
         case 2:
-          $__17 = $ctx.sent;
+          $__20 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__5 = $__17;
-          $__18 = $__5.closed;
-          closed = $__18;
-          $__19 = $__5.data;
-          data = $__19;
+          $__6 = $__20;
+          $__21 = $__6.closed;
+          closed = $__21;
+          $__22 = $__6.data;
+          data = $__22;
           $ctx.state = 8;
           break;
         case 8:
@@ -203,5 +211,28 @@ var extractFixedStreamHead = async($traceurRuntime.initGeneratorFunction(functio
         default:
           return $ctx.end();
       }
-  }, $__14, this);
+  }, $__17, this);
 }));
+var headerExtractFilter = streamFilter((function(config, handler) {
+  var $__8,
+      $__7;
+  var $__6 = config,
+      headerSeparator = ($__8 = $__6.headerSeparator) === void 0 ? '\r\n\r\n' : $__8,
+      streamHeadMaxLength = ($__7 = $__6.streamHeadMaxLength) === void 0 ? -1 : $__7;
+  if (!Buffer.isBuffer(separator))
+    separator = new Buffer(separator);
+  var extractOptions = {maxLength: streamHeadMaxLength};
+  return (function(args, inputStreamable) {
+    return inputStreamable.toStream.then((function(readStream) {
+      return extractStreamHead(readStream, separator, extractOptions);
+    })).then((function($__9) {
+      var $__10 = $__9,
+          header = $__10[0],
+          readStream = $__10[1];
+      args.header = header;
+      var streamable = streamToStreamable(readStream);
+      return handler(args, streamable);
+    }));
+  });
+}));
+var makeHeaderExtractFilter = headerExtractFilter.factory();

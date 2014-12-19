@@ -1,24 +1,24 @@
 "use strict";
-var $__traceur_64_0_46_0_46_7__,
+var $__quiver_45_core_47_traceur__,
     $__zlib__,
     $__buffertools__,
-    $__quiver_45_promise__,
-    $__quiver_45_component__,
-    $__quiver_45_stream_45_util__,
+    $__quiver_45_core_47_promise__,
+    $__quiver_45_core_47_component__,
+    $__quiver_45_core_47_stream_45_util__,
     $___46__46__47_lib_47_stream_45_component__,
     $__chai__,
     $__chai_45_as_45_promised__;
-($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
+($__quiver_45_core_47_traceur__ = require("quiver-core/traceur"), $__quiver_45_core_47_traceur__ && $__quiver_45_core_47_traceur__.__esModule && $__quiver_45_core_47_traceur__ || {default: $__quiver_45_core_47_traceur__});
 var zlib = ($__zlib__ = require("zlib"), $__zlib__ && $__zlib__.__esModule && $__zlib__ || {default: $__zlib__}).default;
 var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
-var $__2 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+var $__2 = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}),
     async = $__2.async,
     promisify = $__2.promisify;
-var $__3 = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}),
+var $__3 = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}),
     simpleHandler = $__3.simpleHandler,
     transformFilter = $__3.transformFilter,
     loadStreamHandler = $__3.loadStreamHandler;
-var $__4 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+var $__4 = ($__quiver_45_core_47_stream_45_util__ = require("quiver-core/stream-util"), $__quiver_45_core_47_stream_45_util__ && $__quiver_45_core_47_stream_45_util__.__esModule && $__quiver_45_core_47_stream_45_util__ || {default: $__quiver_45_core_47_stream_45_util__}),
     textToStreamable = $__4.textToStreamable,
     streamToBuffer = $__4.streamToBuffer,
     streamableToBuffer = $__4.streamableToBuffer;
@@ -39,6 +39,7 @@ describe('compress stream test', (function() {
         resultBuffer,
         cachedStreamable,
         cachedBuffer,
+        gunzipHandler,
         main,
         handler;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -101,9 +102,11 @@ describe('compress stream test', (function() {
             break;
           case 24:
             should.equal(buffertools.compare(resultBuffer, compressed), 0);
+            gzipHandler = compressHandler().configOverride({compressAlgorithm: 'gzip'});
+            gunzipHandler = compressHandler().configOverride({compressAlgorithm: 'gunzip'});
             main = simpleHandler((function(args) {
               return testContent;
-            }), 'void', 'text').middleware(transformFilter(compressHandler('gzip'), 'out')).middleware(transformFilter(compressHandler('gunzip'), 'out'));
+            }), 'void', 'text').middleware(transformFilter(gzipHandler, 'out')).middleware(transformFilter(gunzipHandler, 'out'));
             $ctx.state = 40;
             break;
           case 40:

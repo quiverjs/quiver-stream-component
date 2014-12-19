@@ -1,23 +1,20 @@
-import 'traceur'
+import 'quiver-core/traceur'
 
-import { async } from 'quiver-promise'
+import { async } from 'quiver-core/promise'
 
 import { 
   simpleHandler, loadStreamHandler
-} from 'quiver-component'
+} from 'quiver-core/component'
 
 import {
   createChannel, textToStreamable, 
   streamableToText, streamToStreamable
-} from 'quiver-stream-util'
+} from 'quiver-core/stream-util'
 
 import {
-  timeoutStream
-} from '../lib/timeout'
-
-import {
+  timeoutStream,
   timeoutStreamFilter
-} from '../lib/component'
+} from '../lib/stream-component'
 
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
@@ -40,10 +37,15 @@ describe('timeout stream test', () => {
   }))
 
   it('timeout filter test', async(function*() {
+    var timeoutFilter = timeoutStreamFilter()
+      .configOverride({
+        filterMode: 'in'
+      })
+
     var component = simpleHandler(
       (args, name) => 'Hello, ' + name,
       'text', 'text')
-    .middleware(timeoutStreamFilter('in'))
+    .middleware(timeoutFilter)
 
     var handler = yield loadStreamHandler({
       streamTimeout: 100

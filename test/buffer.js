@@ -1,16 +1,16 @@
-import 'traceur'
+import 'quiver-core/traceur'
 
-import { async } from 'quiver-promise'
+import { async } from 'quiver-core/promise'
 
 import {
   simpleHandler,
   loadSimpleHandler
-} from 'quiver-component'
+} from 'quiver-core/component'
 
 import {
   buffersToStreamable,
   streamableToText
-} from 'quiver-stream-util'
+} from 'quiver-core/stream-util'
 
 import {
   bufferConvertHandler,
@@ -29,7 +29,10 @@ describe('buffer convert test', () => {
     var toUpperCase = data =>
       data.toString().toUpperCase()
 
-    var component = bufferConvertHandler(toUpperCase)
+    var component = bufferConvertHandler()
+      .configOverride({
+        bufferConverter: toUpperCase
+      })
 
     var handler1 = yield loadSimpleHandler(
       {}, component, 'text', 'text')
@@ -56,15 +59,25 @@ describe('buffer convert test', () => {
       return data.toString().toLowerCase()
     }
 
+    var inFilter = bufferConvertFilter()
+      .configOverride({
+        filterMode: 'in',
+        bufferConverter: toUpperCase
+      })
+
+    var outFilter = bufferConvertFilter()
+      .configOverride({
+        filterMode: 'out',
+        bufferConverter: toLowerCase
+      })
+
     var component = simpleHandler((args, name) => {
       name.should.equal('JOHN')
 
       return 'Hello, ' + name
     }, 'text', 'text')
-    .middleware(bufferConvertFilter(
-      toUpperCase, 'in'))
-    .middleware(bufferConvertFilter(
-      toLowerCase, 'out'))
+    .middleware(inFilter)
+    .middleware(outFilter)
 
     var handler = yield component.loadHandler({})
 

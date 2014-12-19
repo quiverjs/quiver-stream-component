@@ -3,28 +3,38 @@ Object.defineProperties(exports, {
   throttledStream: {get: function() {
       return throttledStream;
     }},
+  throttledStreamFilter: {get: function() {
+      return throttledStreamFilter;
+    }},
+  makeThrottledStreamFilter: {get: function() {
+      return makeThrottledStreamFilter;
+    }},
   __esModule: {value: true}
 });
-var $__quiver_45_promise__;
-var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+var $__quiver_45_core_47_promise__,
+    $__quiver_45_core_47_component__,
+    $__stream__;
+var $__0 = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}),
     async = $__0.async,
     timeout = $__0.timeout;
+var configMiddleware = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}).configMiddleware;
+var makeStreamConvertFilter = ($__stream__ = require("./stream"), $__stream__ && $__stream__.__esModule && $__stream__ || {default: $__stream__}).makeStreamConvertFilter;
 var throttledStream = (function(readStream, throttleRate) {
   throttleRate = throttleRate / 10;
   var originalRead = readStream.read;
   var currentRate = 0;
   var lastUpdate = Date.now();
   var isClosed = false;
-  var throttledRead = async($traceurRuntime.initGeneratorFunction(function $__2() {
+  var throttledRead = async($traceurRuntime.initGeneratorFunction(function $__5() {
     var now,
         timeElapsed,
-        $__1,
+        $__3,
         closed,
         data,
-        $__3,
-        $__4,
-        $__5,
-        $__6;
+        $__6,
+        $__7,
+        $__8,
+        $__9;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -64,22 +74,22 @@ var throttledStream = (function(readStream, throttleRate) {
             $ctx.state = 12;
             break;
           case 12:
-            $__3 = originalRead();
+            $__6 = originalRead();
             $ctx.state = 19;
             break;
           case 19:
             $ctx.state = 15;
-            return $__3;
+            return $__6;
           case 15:
-            $__4 = $ctx.sent;
+            $__7 = $ctx.sent;
             $ctx.state = 17;
             break;
           case 17:
-            $__1 = $__4;
-            $__5 = $__1.closed;
-            closed = $__5;
-            $__6 = $__1.data;
-            data = $__6;
+            $__3 = $__7;
+            $__8 = $__3.closed;
+            closed = $__8;
+            $__9 = $__3.data;
+            data = $__9;
             $ctx.state = 21;
             break;
           case 21:
@@ -106,9 +116,21 @@ var throttledStream = (function(readStream, throttleRate) {
           default:
             return $ctx.end();
         }
-    }, $__2, this);
+    }, $__5, this);
   }));
   var newStream = Object.create(readStream);
   newStream.read = throttledRead;
   return newStream;
 });
+var throttledStreamFilter = makeStreamConvertFilter().middleware(configMiddleware((function(config) {
+  var $__4;
+  var $__3 = config,
+      throttleRate = ($__4 = $__3.throttleRate) === void 0 ? -1 : $__4;
+  if (!(throttleRate > 0))
+    return;
+  config.replaceStreamable = true;
+  config.streamConverter = (function(readStream) {
+    return throttledStream(readStream, throttleRate);
+  });
+})));
+var makeThrottledStreamFilter = throttledStreamFilter.factory();

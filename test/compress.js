@@ -1,19 +1,19 @@
-import 'traceur'
+import 'quiver-core/traceur'
 import zlib from 'zlib'
 import buffertools from 'buffertools'
-import { async, promisify } from 'quiver-promise'
+import { async, promisify } from 'quiver-core/promise'
 
 import { 
   simpleHandler,
   transformFilter,
   loadStreamHandler 
-} from 'quiver-component'
+} from 'quiver-core/component'
 
 import { 
   textToStreamable, 
   streamToBuffer,
   streamableToBuffer,
-} from 'quiver-stream-util'
+} from 'quiver-core/stream-util'
 
 import { compressHandler } from '../lib/stream-component'
 
@@ -55,13 +55,21 @@ describe('compress stream test', () => {
     should.equal(buffertools.compare(
       resultBuffer, compressed), 0)
 
+    var gzipHandler = compressHandler()
+      .configOverride({
+        compressAlgorithm: 'gzip'
+      })
+
+    var gunzipHandler = compressHandler()
+      .configOverride({
+        compressAlgorithm: 'gunzip'
+      })
+
     var main = simpleHandler(
       args => testContent, 
       'void', 'text')
-      .middleware(transformFilter(
-        compressHandler('gzip'), 'out'))
-      .middleware(transformFilter(
-        compressHandler('gunzip'), 'out'))
+      .middleware(transformFilter(gzipHandler, 'out'))
+      .middleware(transformFilter(gunzipHandler, 'out'))
 
     var handler = yield main.loadHandler({})
 

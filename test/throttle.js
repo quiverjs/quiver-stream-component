@@ -1,11 +1,11 @@
-import 'traceur'
+import 'quiver-core/traceur'
 
-import { async } from 'quiver-promise'
+import { async } from 'quiver-core/promise'
 
 import {
   buffersToStream,
   streamToBuffers
-} from 'quiver-stream-util'
+} from 'quiver-core/stream-util'
 
 import { throttledStream } from '../lib/throttle'
 

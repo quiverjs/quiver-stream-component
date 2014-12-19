@@ -1,17 +1,17 @@
 "use strict";
-var $__traceur_64_0_46_0_46_7__,
-    $__quiver_45_promise__,
-    $__quiver_45_component__,
-    $__quiver_45_stream_45_util__,
+var $__quiver_45_core_47_traceur__,
+    $__quiver_45_core_47_promise__,
+    $__quiver_45_core_47_component__,
+    $__quiver_45_core_47_stream_45_util__,
     $___46__46__47_lib_47_stream_45_component__,
     $__chai__,
     $__chai_45_as_45_promised__;
-($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
-var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
-var $__1 = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}),
+($__quiver_45_core_47_traceur__ = require("quiver-core/traceur"), $__quiver_45_core_47_traceur__ && $__quiver_45_core_47_traceur__.__esModule && $__quiver_45_core_47_traceur__ || {default: $__quiver_45_core_47_traceur__});
+var async = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}).async;
+var $__1 = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}),
     simpleHandler = $__1.simpleHandler,
     loadSimpleHandler = $__1.loadSimpleHandler;
-var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+var $__2 = ($__quiver_45_core_47_stream_45_util__ = require("quiver-core/stream-util"), $__quiver_45_core_47_stream_45_util__ && $__quiver_45_core_47_stream_45_util__.__esModule && $__quiver_45_core_47_stream_45_util__ || {default: $__quiver_45_core_47_stream_45_util__}),
     buffersToStreamable = $__2.buffersToStreamable,
     streamableToText = $__2.streamableToText;
 var $__3 = ($___46__46__47_lib_47_stream_45_component__ = require("../lib/stream-component"), $___46__46__47_lib_47_stream_45_component__ && $___46__46__47_lib_47_stream_45_component__.__esModule && $___46__46__47_lib_47_stream_45_component__ || {default: $___46__46__47_lib_47_stream_45_component__}),
@@ -36,7 +36,7 @@ describe('buffer convert test', (function() {
             toUpperCase = (function(data) {
               return data.toString().toUpperCase();
             });
-            component = bufferConvertHandler(toUpperCase);
+            component = bufferConvertHandler().configOverride({bufferConverter: toUpperCase});
             $ctx.state = 18;
             break;
           case 18:
@@ -79,6 +79,8 @@ describe('buffer convert test', (function() {
   it('filter convert test', async($traceurRuntime.initGeneratorFunction(function $__7() {
     var toUpperCase,
         toLowerCase,
+        inFilter,
+        outFilter,
         component,
         handler;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -91,10 +93,18 @@ describe('buffer convert test', (function() {
             toLowerCase = (function(data) {
               return data.toString().toLowerCase();
             });
+            inFilter = bufferConvertFilter().configOverride({
+              filterMode: 'in',
+              bufferConverter: toUpperCase
+            });
+            outFilter = bufferConvertFilter().configOverride({
+              filterMode: 'out',
+              bufferConverter: toLowerCase
+            });
             component = simpleHandler((function(args, name) {
               name.should.equal('JOHN');
               return 'Hello, ' + name;
-            }), 'text', 'text').middleware(bufferConvertFilter(toUpperCase, 'in')).middleware(bufferConvertFilter(toLowerCase, 'out'));
+            }), 'text', 'text').middleware(inFilter).middleware(outFilter);
             $ctx.state = 10;
             break;
           case 10:

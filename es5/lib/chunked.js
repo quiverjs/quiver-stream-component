@@ -6,33 +6,46 @@ Object.defineProperties(exports, {
   streamToUnchunkedStream: {get: function() {
       return streamToUnchunkedStream;
     }},
+  chunkedTransformHandler: {get: function() {
+      return chunkedTransformHandler;
+    }},
+  unchunkedTransformHandler: {get: function() {
+      return unchunkedTransformHandler;
+    }},
+  makeChunkedTransformHandler: {get: function() {
+      return makeChunkedTransformHandler;
+    }},
+  makeUnchunkedTransformHandler: {get: function() {
+      return makeUnchunkedTransformHandler;
+    }},
   __esModule: {value: true}
 });
-var $__quiver_45_error__,
-    $__quiver_45_promise__,
+var $__quiver_45_core_47_error__,
+    $__quiver_45_core_47_promise__,
+    $__quiver_45_core_47_component__,
+    $__quiver_45_core_47_stream_45_util__,
     $__buffertools__,
-    $__quiver_45_stream_45_util__,
     $__head__;
-var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
-var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
-var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
-var $__5 = buffertools,
-    compareBuffer = $__5.compare,
-    indexOf = $__5.indexOf;
-var $__3 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+var error = ($__quiver_45_core_47_error__ = require("quiver-core/error"), $__quiver_45_core_47_error__ && $__quiver_45_core_47_error__.__esModule && $__quiver_45_core_47_error__ || {default: $__quiver_45_core_47_error__}).error;
+var async = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}).async;
+var simpleHandler = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}).simpleHandler;
+var $__3 = ($__quiver_45_core_47_stream_45_util__ = require("quiver-core/stream-util"), $__quiver_45_core_47_stream_45_util__ && $__quiver_45_core_47_stream_45_util__.__esModule && $__quiver_45_core_47_stream_45_util__ || {default: $__quiver_45_core_47_stream_45_util__}),
     createChannel = $__3.createChannel,
     pushbackStream = $__3.pushbackStream;
-var $__4 = ($__head__ = require("./head"), $__head__ && $__head__.__esModule && $__head__ || {default: $__head__}),
-    extractStreamHead = $__4.extractStreamHead,
-    extractFixedStreamHead = $__4.extractFixedStreamHead;
-var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__8(readStream, writeStream) {
+var buffertools = ($__buffertools__ = require("buffertools"), $__buffertools__ && $__buffertools__.__esModule && $__buffertools__ || {default: $__buffertools__}).default;
+var $__6 = buffertools,
+    compareBuffer = $__6.compare,
+    indexOf = $__6.indexOf;
+var $__5 = ($__head__ = require("./head"), $__head__ && $__head__.__esModule && $__head__ || {default: $__head__}),
+    extractStreamHead = $__5.extractStreamHead,
+    extractFixedStreamHead = $__5.extractFixedStreamHead;
+var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__9(readStream, writeStream) {
   var options,
       closed,
-      $__7,
+      $__8,
       data,
       chunkHead,
       chunkSize,
-      $__9,
       $__10,
       $__11,
       $__12,
@@ -41,6 +54,7 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
       $__15,
       $__16,
       $__17,
+      $__18,
       err;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -58,20 +72,20 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = (true) ? 5 : 27;
           break;
         case 5:
-          $__9 = writeStream.prepareWrite;
-          $__10 = $__9.call(writeStream);
+          $__10 = writeStream.prepareWrite;
+          $__11 = $__10.call(writeStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__10;
+          return $__11;
         case 2:
-          $__11 = $ctx.sent;
+          $__12 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__12 = $__11.closed;
-          closed = $__12;
+          $__13 = $__12.closed;
+          closed = $__13;
           $ctx.state = 8;
           break;
         case 8:
@@ -82,23 +96,23 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
           $ctx.state = -2;
           break;
         case 10:
-          $__13 = readStream.read;
-          $__14 = $__13.call(readStream);
+          $__14 = readStream.read;
+          $__15 = $__14.call(readStream);
           $ctx.state = 17;
           break;
         case 17:
           $ctx.state = 13;
-          return $__14;
+          return $__15;
         case 13:
-          $__15 = $ctx.sent;
+          $__16 = $ctx.sent;
           $ctx.state = 15;
           break;
         case 15:
-          $__7 = $__15;
-          $__16 = $__7.closed;
-          closed = $__16;
-          $__17 = $__7.data;
-          data = $__17;
+          $__8 = $__16;
+          $__17 = $__8.closed;
+          closed = $__17;
+          $__18 = $__8.data;
+          data = $__18;
           $ctx.state = 19;
           break;
         case 19:
@@ -143,18 +157,18 @@ var pipeChunkedStream = async($traceurRuntime.initGeneratorFunction(function $__
         default:
           return $ctx.end();
       }
-  }, $__8, this);
+  }, $__9, this);
 }));
 var chunkSeparator = new Buffer('\r\n');
-var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(function $__18(readStream) {
+var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(function $__19(readStream) {
   var headers,
-      $__6,
+      $__7,
       head,
       readStream,
-      $__19,
       $__20,
       $__21,
-      $__22;
+      $__22,
+      $__23;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -166,22 +180,22 @@ var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(functio
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__19 = extractStreamHead(readStream, chunkSeparator);
+          $__20 = extractStreamHead(readStream, chunkSeparator);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__19;
+          return $__20;
         case 2:
-          $__20 = $ctx.sent;
+          $__21 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__6 = $__20;
-          $__21 = $__6[0];
-          head = $__21;
-          $__22 = $__6[1];
-          readStream = $__22;
+          $__7 = $__21;
+          $__22 = $__7[0];
+          head = $__22;
+          $__23 = $__7[1];
+          readStream = $__23;
           $ctx.state = 8;
           break;
         case 8:
@@ -198,16 +212,15 @@ var extractTrailingHeaders = async($traceurRuntime.initGeneratorFunction(functio
         default:
           return $ctx.end();
       }
-  }, $__18, this);
+  }, $__19, this);
 }));
-var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__23(readStream, writeStream, size) {
+var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__24(readStream, writeStream, size) {
   var closed,
-      $__7,
+      $__8,
       data,
       bufferSize,
       head,
       rest,
-      $__24,
       $__25,
       $__26,
       $__27,
@@ -215,7 +228,8 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__23(readS
       $__29,
       $__30,
       $__31,
-      $__32;
+      $__32,
+      $__33;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -223,20 +237,20 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__23(readS
           $ctx.state = (true) ? 5 : -2;
           break;
         case 5:
-          $__24 = writeStream.prepareWrite;
-          $__25 = $__24.call(writeStream);
+          $__25 = writeStream.prepareWrite;
+          $__26 = $__25.call(writeStream);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__25;
+          return $__26;
         case 2:
-          $__26 = $ctx.sent;
+          $__27 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__27 = $__26.closed;
-          closed = $__27;
+          $__28 = $__27.closed;
+          closed = $__28;
           $ctx.state = 8;
           break;
         case 8:
@@ -247,23 +261,23 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__23(readS
           $ctx.state = -2;
           break;
         case 10:
-          $__28 = readStream.read;
-          $__29 = $__28.call(readStream);
+          $__29 = readStream.read;
+          $__30 = $__29.call(readStream);
           $ctx.state = 17;
           break;
         case 17:
           $ctx.state = 13;
-          return $__29;
+          return $__30;
         case 13:
-          $__30 = $ctx.sent;
+          $__31 = $ctx.sent;
           $ctx.state = 15;
           break;
         case 15:
-          $__7 = $__30;
-          $__31 = $__7.closed;
-          closed = $__31;
-          $__32 = $__7.data;
-          data = $__32;
+          $__8 = $__31;
+          $__32 = $__8.closed;
+          closed = $__32;
+          $__33 = $__8.data;
+          data = $__33;
           $ctx.state = 19;
           break;
         case 19:
@@ -306,20 +320,19 @@ var pipeChunk = async($traceurRuntime.initGeneratorFunction(function $__23(readS
         default:
           return $ctx.end();
       }
-  }, $__23, this);
+  }, $__24, this);
 }));
-var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $__33(readStream, writeStream) {
+var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $__34(readStream, writeStream) {
   var options,
-      $__6,
+      $__7,
       chunkHead,
       readStream,
       chunkSizeText,
       extensionIndex,
       chunkSize,
       trailingHeaders,
-      $__7,
+      $__8,
       head,
-      $__34,
       $__35,
       $__36,
       $__37,
@@ -327,6 +340,7 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
       $__39,
       $__40,
       $__41,
+      $__42,
       err;
   var $arguments = arguments;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -344,22 +358,22 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
           $ctx.state = (true) ? 5 : 34;
           break;
         case 5:
-          $__34 = extractStreamHead(readStream, chunkSeparator);
+          $__35 = extractStreamHead(readStream, chunkSeparator);
           $ctx.state = 6;
           break;
         case 6:
           $ctx.state = 2;
-          return $__34;
+          return $__35;
         case 2:
-          $__35 = $ctx.sent;
+          $__36 = $ctx.sent;
           $ctx.state = 4;
           break;
         case 4:
-          $__6 = $__35;
-          $__36 = $__6[0];
-          chunkHead = $__36;
-          $__37 = $__6[1];
-          readStream = $__37;
+          $__7 = $__36;
+          $__37 = $__7[0];
+          chunkHead = $__37;
+          $__38 = $__7[1];
+          readStream = $__38;
           $ctx.state = 8;
           break;
         case 8:
@@ -400,22 +414,22 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
           $ctx.state = 21;
           break;
         case 21:
-          $__38 = extractFixedStreamHead(readStream, 2);
+          $__39 = extractFixedStreamHead(readStream, 2);
           $ctx.state = 27;
           break;
         case 27:
           $ctx.state = 23;
-          return $__38;
+          return $__39;
         case 23:
-          $__39 = $ctx.sent;
+          $__40 = $ctx.sent;
           $ctx.state = 25;
           break;
         case 25:
-          $__7 = $__39;
-          $__40 = $__7[0];
-          head = $__40;
-          $__41 = $__7[1];
-          readStream = $__41;
+          $__8 = $__40;
+          $__41 = $__8[0];
+          head = $__41;
+          $__42 = $__8[1];
+          readStream = $__42;
           $ctx.state = 29;
           break;
         case 29:
@@ -443,19 +457,27 @@ var pipeUnchunkedStream = async($traceurRuntime.initGeneratorFunction(function $
         default:
           return $ctx.end();
       }
-  }, $__33, this);
+  }, $__34, this);
 }));
 var streamToChunkedStream = (function(unchunkedStream) {
-  var $__6 = createChannel(),
-      readStream = $__6.readStream,
-      writeStream = $__6.writeStream;
+  var $__7 = createChannel(),
+      readStream = $__7.readStream,
+      writeStream = $__7.writeStream;
   pipeChunkedStream(unchunkedStream, writeStream);
   return readStream;
 });
 var streamToUnchunkedStream = (function(chunkedStream) {
-  var $__6 = createChannel(),
-      readStream = $__6.readStream,
-      writeStream = $__6.writeStream;
+  var $__7 = createChannel(),
+      readStream = $__7.readStream,
+      writeStream = $__7.writeStream;
   pipeUnchunkedStream(chunkedStream, writeStream);
   return readStream;
 });
+var chunkedTransformHandler = simpleHandler((function(args, inputStream) {
+  return streamToChunkedStream(inputStream);
+}), 'stream', 'stream');
+var unchunkedTransformHandler = simpleHandler((function(args, inputStream) {
+  return streamToUnchunkedStream(inputStream);
+}), 'stream', 'stream');
+var makeChunkedTransformHandler = chunkedTransformHandler.factory();
+var makeUnchunkedTransformHandler = unchunkedTransformHandler.factory();

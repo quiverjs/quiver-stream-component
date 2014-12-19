@@ -12,21 +12,29 @@ Object.defineProperties(exports, {
   compressStreamable: {get: function() {
       return compressStreamable;
     }},
+  compressHandler: {get: function() {
+      return compressHandler;
+    }},
+  makeCompressHandler: {get: function() {
+      return makeCompressHandler;
+    }},
   __esModule: {value: true}
 });
 var $__zlib__,
-    $__quiver_45_promise__,
-    $__quiver_45_stream_45_util__;
+    $__quiver_45_core_47_promise__,
+    $__quiver_45_core_47_component__,
+    $__quiver_45_core_47_stream_45_util__;
 var zlib = ($__zlib__ = require("zlib"), $__zlib__ && $__zlib__.__esModule && $__zlib__ || {default: $__zlib__}).default;
-var $__1 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+var $__1 = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}),
     async = $__1.async,
     resolve = $__1.resolve;
-var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
-    pipeStream = $__2.pipeStream,
-    reuseStream = $__2.reuseStream,
-    streamToStreamable = $__2.streamToStreamable,
-    nodeToQuiverReadStream = $__2.nodeToQuiverReadStream,
-    nodeToQuiverWriteStream = $__2.nodeToQuiverWriteStream;
+var streamHandlerBuilder = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}).streamHandlerBuilder;
+var $__3 = ($__quiver_45_core_47_stream_45_util__ = require("quiver-core/stream-util"), $__quiver_45_core_47_stream_45_util__ && $__quiver_45_core_47_stream_45_util__.__esModule && $__quiver_45_core_47_stream_45_util__ || {default: $__quiver_45_core_47_stream_45_util__}),
+    pipeStream = $__3.pipeStream,
+    reuseStream = $__3.reuseStream,
+    streamToStreamable = $__3.streamToStreamable,
+    nodeToQuiverReadStream = $__3.nodeToQuiverReadStream,
+    nodeToQuiverWriteStream = $__3.nodeToQuiverWriteStream;
 var compressorTable = {
   gzip: zlib.createGzip,
   gunzip: zlib.createGunzip,
@@ -57,7 +65,7 @@ var compressStream = (function(algorithm, readStream) {
   var compressor = createCompressor();
   return pipeNodeTransform(readStream, compressor);
 });
-var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $__3(algorithm, streamable) {
+var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $__6(algorithm, streamable) {
   var toCompressStreamable,
       readStream,
       compressedStream,
@@ -109,5 +117,17 @@ var compressStreamable = async($traceurRuntime.initGeneratorFunction(function $_
         default:
           return $ctx.end();
       }
-  }, $__3, this);
+  }, $__6, this);
 }));
+var compressHandler = streamHandlerBuilder((function(config) {
+  var $__5;
+  var $__4 = config,
+      compressAlgorithm = ($__5 = $__4.compressAlgorithm) === void 0 ? 'gzip' : $__5;
+  if (!compressorTable[compressAlgorithm])
+    throw new Error('invalid compression algorithm');
+  var field = compressField(compressAlgorithm);
+  return (function(args, inputStreamable) {
+    return compressStreamable(compressAlgorithm, inputStreamable, field);
+  });
+}));
+var makeCompressHandler = compressHandler.factory();

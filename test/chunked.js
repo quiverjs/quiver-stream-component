@@ -1,10 +1,10 @@
-import 'traceur'
+import 'quiver-core/traceur'
 
-import { async } from 'quiver-promise'
+import { async } from 'quiver-core/promise'
 import {
   streamToText,
   buffersToStream
-} from 'quiver-stream-util'
+} from 'quiver-core/stream-util'
 
 import { 
   streamToChunkedStream, streamToUnchunkedStream 

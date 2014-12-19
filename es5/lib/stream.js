@@ -6,10 +6,13 @@ Object.defineProperties(exports, {
   streamConvertFilter: {get: function() {
       return streamConvertFilter;
     }},
+  makeStreamConvertFilter: {get: function() {
+      return makeStreamConvertFilter;
+    }},
   __esModule: {value: true}
 });
-var $__quiver_45_component__;
-var streamFilter = ($__quiver_45_component__ = require("quiver-component"), $__quiver_45_component__ && $__quiver_45_component__.__esModule && $__quiver_45_component__ || {default: $__quiver_45_component__}).streamFilter;
+var $__quiver_45_core_47_component__;
+var streamFilter = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}).streamFilter;
 var convertStreamable = (function(converter, streamable, inReplace) {
   var originalToStream = streamable.toStream;
   if (!originalToStream)
@@ -33,20 +36,22 @@ var streamableConverter = (function(streamConverter, active, inReplace) {
     return convertStreamable(streamConverter, streamable, inReplace);
   });
 });
-var streamConvertFilter = (function(converterBuilder, mode) {
-  var inReplace = arguments[2] !== (void 0) ? arguments[2] : false;
+var streamConvertFilter = streamFilter((function(config, handler) {
+  var $__2;
+  var $__1 = config,
+      mode = $__1.filterMode,
+      streamConverter = $__1.streamConverter,
+      replaceStreamable = ($__2 = $__1.replaceStreamable) === void 0 ? false : $__2;
+  if (!streamConverter)
+    throw new Error('config.streamConverter() required');
   if (!(mode == 'in' || mode == 'out' || mode == 'inout'))
     throw new Error('invalid stream convert mode');
   var inMode = (mode == 'in' || mode == 'inout');
   var outMode = (mode == 'out' || mode == 'inout');
-  return streamFilter((function(config, handler) {
-    var converter = converterBuilder(config);
-    if (!converter)
-      return handler;
-    var inConvert = streamableConverter(converter, inMode, inReplace);
-    var outConvert = streamableConverter(converter, outMode, inReplace);
-    return (function(args, inputStreamable) {
-      return handler(args, inConvert(inputStreamable)).then(outConvert);
-    });
-  }));
-});
+  var inConvert = streamableConverter(streamConverter, inMode, replaceStreamable);
+  var outConvert = streamableConverter(streamConverter, outMode, replaceStreamable);
+  return (function(args, inputStreamable) {
+    return handler(args, inConvert(inputStreamable)).then(outConvert);
+  });
+}));
+var makeStreamConvertFilter = streamConvertFilter.factory();
