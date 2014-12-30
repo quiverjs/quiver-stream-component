@@ -96,12 +96,12 @@ describe('timeout stream test', (function() {
             timeoutFilter = timeoutStreamFilter().configOverride({filterMode: 'in'});
             component = simpleHandler((function(args, name) {
               return 'Hello, ' + name;
-            }), 'text', 'text').middleware(timeoutFilter);
+            }), 'text', 'text').middleware(timeoutFilter).setLoader(loadStreamHandler);
             $ctx.state = 14;
             break;
           case 14:
             $ctx.state = 2;
-            return loadStreamHandler({streamTimeout: 100}, component);
+            return component.loadHandler({streamTimeout: 100});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;

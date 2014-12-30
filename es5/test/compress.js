@@ -34,6 +34,7 @@ describe('compress stream test', (function() {
   it('basic gzip compression', async($traceurRuntime.initGeneratorFunction(function $__8() {
     var compressed,
         uncompressed,
+        component,
         gzipHandler,
         inputStreamable,
         resultBuffer,
@@ -61,11 +62,12 @@ describe('compress stream test', (function() {
             break;
           case 8:
             uncompressed.toString().should.equal(testContent);
+            component = compressHandler('gzip').setLoader(loadStreamHandler);
             $ctx.state = 34;
             break;
           case 34:
             $ctx.state = 10;
-            return loadStreamHandler({}, compressHandler('gzip'));
+            return component.loadHandler({});
           case 10:
             gzipHandler = $ctx.sent;
             $ctx.state = 12;

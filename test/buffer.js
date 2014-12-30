@@ -4,12 +4,13 @@ import { async } from 'quiver-core/promise'
 
 import {
   simpleHandler,
-  loadSimpleHandler
+  simpleHandlerLoader
 } from 'quiver-core/component'
 
 import {
-  buffersToStreamable,
-  streamableToText
+  textToStream,
+  streamToText,
+  buffersToStream
 } from 'quiver-core/stream-util'
 
 import {
@@ -34,19 +35,17 @@ describe('buffer convert test', () => {
         bufferConverter: toUpperCase
       })
 
-    var handler1 = yield loadSimpleHandler(
-      {}, component, 'text', 'text')
+    var handler = yield component.loadHandler({})
 
-    yield handler1({}, 'Hello World')
+    yield handler({}, textToStream('Hello World'))
+      .then(streamToText)
       .should.eventually.equal('HELLO WORLD')
 
-    var handler2 = yield loadSimpleHandler(
-      {}, component, 'streamable', 'text')
-
-    var inputStreamable = buffersToStreamable(
+    var inputStreamable = buffersToStream(
       ['Hell', 'o Wo', 'rld'])
 
-    yield handler2({}, inputStreamable)
+    yield handler({}, inputStreamable)
+      .then(streamToText)
       .should.eventually.equal('HELLO WORLD')
   }))
 

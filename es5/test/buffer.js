@@ -10,10 +10,11 @@ var $__quiver_45_core_47_traceur__,
 var async = ($__quiver_45_core_47_promise__ = require("quiver-core/promise"), $__quiver_45_core_47_promise__ && $__quiver_45_core_47_promise__.__esModule && $__quiver_45_core_47_promise__ || {default: $__quiver_45_core_47_promise__}).async;
 var $__1 = ($__quiver_45_core_47_component__ = require("quiver-core/component"), $__quiver_45_core_47_component__ && $__quiver_45_core_47_component__.__esModule && $__quiver_45_core_47_component__ || {default: $__quiver_45_core_47_component__}),
     simpleHandler = $__1.simpleHandler,
-    loadSimpleHandler = $__1.loadSimpleHandler;
+    simpleHandlerLoader = $__1.simpleHandlerLoader;
 var $__2 = ($__quiver_45_core_47_stream_45_util__ = require("quiver-core/stream-util"), $__quiver_45_core_47_stream_45_util__ && $__quiver_45_core_47_stream_45_util__.__esModule && $__quiver_45_core_47_stream_45_util__ || {default: $__quiver_45_core_47_stream_45_util__}),
-    buffersToStreamable = $__2.buffersToStreamable,
-    streamableToText = $__2.streamableToText;
+    textToStream = $__2.textToStream,
+    streamToText = $__2.streamToText,
+    buffersToStream = $__2.buffersToStream;
 var $__3 = ($___46__46__47_lib_47_stream_45_component__ = require("../lib/stream-component"), $___46__46__47_lib_47_stream_45_component__ && $___46__46__47_lib_47_stream_45_component__.__esModule && $___46__46__47_lib_47_stream_45_component__ || {default: $___46__46__47_lib_47_stream_45_component__}),
     bufferConvertHandler = $__3.bufferConvertHandler,
     bufferConvertFilter = $__3.bufferConvertFilter,
@@ -26,8 +27,7 @@ describe('buffer convert test', (function() {
   it('uppercase handler', async($traceurRuntime.initGeneratorFunction(function $__6() {
     var toUpperCase,
         component,
-        handler1,
-        handler2,
+        handler,
         inputStreamable;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
@@ -37,37 +37,30 @@ describe('buffer convert test', (function() {
               return data.toString().toUpperCase();
             });
             component = bufferConvertHandler().configOverride({bufferConverter: toUpperCase});
-            $ctx.state = 18;
+            $ctx.state = 14;
             break;
-          case 18:
+          case 14:
             $ctx.state = 2;
-            return loadSimpleHandler({}, component, 'text', 'text');
+            return component.loadHandler({});
           case 2:
-            handler1 = $ctx.sent;
+            handler = $ctx.sent;
             $ctx.state = 4;
             break;
           case 4:
             $ctx.state = 6;
-            return handler1({}, 'Hello World').should.eventually.equal('HELLO WORLD');
+            return handler({}, textToStream('Hello World')).then(streamToText).should.eventually.equal('HELLO WORLD');
           case 6:
             $ctx.maybeThrow();
             $ctx.state = 8;
             break;
           case 8:
+            inputStreamable = buffersToStream(['Hell', 'o Wo', 'rld']);
+            $ctx.state = 16;
+            break;
+          case 16:
             $ctx.state = 10;
-            return loadSimpleHandler({}, component, 'streamable', 'text');
+            return handler({}, inputStreamable).then(streamToText).should.eventually.equal('HELLO WORLD');
           case 10:
-            handler2 = $ctx.sent;
-            $ctx.state = 12;
-            break;
-          case 12:
-            inputStreamable = buffersToStreamable(['Hell', 'o Wo', 'rld']);
-            $ctx.state = 20;
-            break;
-          case 20:
-            $ctx.state = 14;
-            return handler2({}, inputStreamable).should.eventually.equal('HELLO WORLD');
-          case 14:
             $ctx.maybeThrow();
             $ctx.state = -2;
             break;

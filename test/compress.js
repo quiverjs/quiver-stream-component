@@ -35,8 +35,10 @@ describe('compress stream test', () => {
     var uncompressed = yield gunzip(compressed)
     uncompressed.toString().should.equal(testContent)
 
-    var gzipHandler = yield loadStreamHandler({}, 
-      compressHandler('gzip'))
+    var component = compressHandler('gzip')
+      .setLoader(loadStreamHandler)
+
+    var gzipHandler = yield component.loadHandler({})
 
     var inputStreamable = textToStreamable(testContent)
     var resultBuffer = yield gzipHandler({}, inputStreamable)
