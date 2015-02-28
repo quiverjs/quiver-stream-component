@@ -11,7 +11,7 @@ import {
   nodeToQuiverWriteStream,
 } from 'quiver-core/stream-util'
 
-export var compressorTable = {
+export let compressorTable = {
   gzip: zlib.createGzip,
   gunzip: zlib.createGunzip,
   deflate: zlib.createDeflate,
@@ -19,7 +19,7 @@ export var compressorTable = {
   unzip: zlib.createUnzip
 }
 
-var compressFieldTable = {
+let compressFieldTable = {
   gzip: 'toGzipStreamable',
   gunzip: 'toGunzipStreamable',
   deflate: 'toDeflateStreamable',
@@ -27,44 +27,44 @@ var compressFieldTable = {
   unzip: 'toUnzipStreamable'
 }
 
-export var compressField = algorithm => {
+export let compressField = algorithm => {
   return compressFieldTable[algorithm]
 }
 
-var pipeNodeTransform = (readStream, nodeStream) => {
-  var writeStream = nodeToQuiverWriteStream(nodeStream)
-  var resultStream = nodeToQuiverReadStream(nodeStream)
+let pipeNodeTransform = (readStream, nodeStream) => {
+  let writeStream = nodeToQuiverWriteStream(nodeStream)
+  let resultStream = nodeToQuiverReadStream(nodeStream)
 
   pipeStream(readStream, writeStream)
 
   return resultStream
 }
 
-export var compressStream = (algorithm, readStream) => {
-  var createCompressor = compressorTable[algorithm]
+export let compressStream = (algorithm, readStream) => {
+  let createCompressor = compressorTable[algorithm]
 
   if(!createCompressor) 
     throw new Error('invalid compression algorithm')
 
-  var compressor = createCompressor()
+  let compressor = createCompressor()
 
   return pipeNodeTransform(readStream, compressor)
 }
 
-export var compressStreamable = async(
+export let compressStreamable = async(
 function*(algorithm, streamable, 
   toCompressStreamable=compressField(algorithm)) 
 {
   if(streamable[toCompressStreamable]) 
     return streamable[toCompressStreamable]()
 
-  var readStream = yield streamable.toStream()
-  var compressedStream = compressStream(algorithm, readStream)
+  let readStream = yield streamable.toStream()
+  let compressedStream = compressStream(algorithm, readStream)
 
   if(!streamable.reusable)
     return streamToStreamable(compressedStream)
 
-  var compressedStreamable = reuseStream(compressedStream)
+  let compressedStreamable = reuseStream(compressedStream)
 
   streamable[toCompressStreamable] = () =>
     resolve(compressedStreamable)
@@ -72,18 +72,18 @@ function*(algorithm, streamable,
   return compressedStreamable
 })
 
-export var compressHandler = streamHandlerBuilder(
+export let compressHandler = streamHandlerBuilder(
 config => {
-  var { compressAlgorithm='gzip' } = config
+  let { compressAlgorithm='gzip' } = config
 
   if(!compressorTable[compressAlgorithm])
     throw new Error('invalid compression algorithm')
 
-  var field = compressField(compressAlgorithm)
+  let field = compressField(compressAlgorithm)
 
   return (args, inputStreamable) => 
     compressStreamable(compressAlgorithm, 
       inputStreamable, field)
 })
 
-export var makeCompressHandler = compressHandler.factory()
+export let makeCompressHandler = compressHandler.factory()

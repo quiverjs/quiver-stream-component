@@ -20,16 +20,16 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('timeout stream test', () => {
   it('basic test', async(function*() {
-    var { readStream, writeStream } = createChannel()
+    let { readStream, writeStream } = createChannel()
     readStream = timeoutStream(readStream, 100)
 
     writeStream.write('foo')
 
-    var { closed, data } = yield readStream.read()
+    let { closed, data } = yield readStream.read()
     data.should.equal('foo')
 
     yield readStream.read()
@@ -37,18 +37,18 @@ describe('timeout stream test', () => {
   }))
 
   it('timeout filter test', async(function*() {
-    var timeoutFilter = timeoutStreamFilter()
+    let timeoutFilter = timeoutStreamFilter()
       .configOverride({
         filterMode: 'in'
       })
 
-    var component = simpleHandler(
+    let component = simpleHandler(
       (args, name) => 'Hello, ' + name,
       'text', 'text')
     .middleware(timeoutFilter)
     .setLoader(loadStreamHandler)
 
-    var handler = yield component.loadHandler({
+    let handler = yield component.loadHandler({
       streamTimeout: 100
     })
 
@@ -56,10 +56,10 @@ describe('timeout stream test', () => {
       .then(streamableToText)
       .should.eventually.equal('Hello, World')
 
-    var { readStream, writeStream } = createChannel()
+    let { readStream, writeStream } = createChannel()
     writeStream.write('foo')
 
-    var streamable = streamToStreamable(readStream)
+    let streamable = streamToStreamable(readStream)
 
     yield handler({}, streamable)
       .should.be.rejected

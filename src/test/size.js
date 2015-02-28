@@ -14,10 +14,10 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('size windowed buffer test', () => {
-  var assertBuffer = (readStream, expected) =>
+  let assertBuffer = (readStream, expected) =>
     readStream.read()
       .then(({closed, data}) => 
         data.toString())
@@ -25,14 +25,14 @@ describe('size windowed buffer test', () => {
 
 
   it('basic test', async(function*() {
-    var testBuffers = [
+    let testBuffers = [
       'Foo',
       'Hello World',
       'Yo',
       'Lorem ipsum dolo'
     ]
 
-    var readStream = buffersToStream(testBuffers)
+    let readStream = buffersToStream(testBuffers)
     readStream = sizeWindowedStream(readStream, 3, 5)
 
     yield assertBuffer(readStream, 'Foo')
@@ -44,7 +44,7 @@ describe('size windowed buffer test', () => {
     yield assertBuffer(readStream, 'm dol')
     yield assertBuffer(readStream, 'o')
 
-    var { closed, data } = yield readStream.read()
+    let { closed, data } = yield readStream.read()
     should.exist(closed)
   }))
 })

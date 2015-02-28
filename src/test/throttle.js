@@ -13,27 +13,27 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
-var testRate = 1024
+let testRate = 1024
 
-var testBuffers = []
-for(var i=0; i<10; i++) {
+let testBuffers = []
+for(let i=0; i<10; i++) {
   testBuffers.push(new Buffer(128))
 }
 
 describe('throttle test', () => {
   it('basic throttle', async(function*() {
-    var readStream = buffersToStream(testBuffers)
+    let readStream = buffersToStream(testBuffers)
     readStream = throttledStream(readStream, testRate)
 
-    var start = Date.now()
+    let start = Date.now()
 
     yield streamToBuffers(readStream)
       .should.eventually.eql(testBuffers)
 
-    var end = Date.now()
-    var diff = end - start
+    let end = Date.now()
+    let diff = end - start
 
     if(diff < 1000 || diff > 1500) {
       throw new Error('Expect throttled stream to finish in 1 second')

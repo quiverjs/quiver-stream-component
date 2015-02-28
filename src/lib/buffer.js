@@ -6,17 +6,17 @@ import {
 
 import { makeStreamConvertFilter } from './stream'
 
-var pipeConvert = async(
+let pipeConvert = async(
 function*(converter, readStream, writeStream) {
   try {
     while(true) {
-      var { closed } = yield writeStream.prepareWrite()
-      if(closed) return readStream.closeRead()
+      let { closed: writeClosed } = yield writeStream.prepareWrite()
+      if(writeClosed) return readStream.closeRead()
 
-      var { closed, data } = yield readStream.read()
+      let { closed, data } = yield readStream.read()
       if(closed) return writeStream.closeWrite()
 
-      var converted = yield converter(data)
+      let converted = yield converter(data)
 
       writeStream.write(converted)
     }
@@ -30,17 +30,17 @@ function*(converter, readStream, writeStream) {
   }
 })
 
-export var convertStream = (converter, inputStream) => {
-  var { readStream, writeStream } = createChannel()
+export let convertStream = (converter, inputStream) => {
+  let { readStream, writeStream } = createChannel()
 
   pipeConvert(converter, inputStream, writeStream)
   .catch(err=>{})
 
   return readStream
 }
-export var bufferConvertHandler = simpleHandlerBuilder(
+export let bufferConvertHandler = simpleHandlerBuilder(
 config => {
-  var { bufferConverter } = config
+  let { bufferConverter } = config
 
   if(!bufferConverter) throw new Error(
       'config.bufferConverter() required')
@@ -50,10 +50,10 @@ config => {
   }
 }, 'stream', 'stream')
 
-export var bufferConvertFilter = makeStreamConvertFilter()
+export let bufferConvertFilter = makeStreamConvertFilter()
   .middleware(configMiddleware(
   config => {
-    var { bufferConverter } = config
+    let { bufferConverter } = config
 
     if(!bufferConverter) throw new Error(
       'config.bufferConverter() required')
@@ -62,8 +62,8 @@ export var bufferConvertFilter = makeStreamConvertFilter()
       convertStream(bufferConverter, readStream)
   }))
 
-export var makeBufferConvertHandler = 
+export let makeBufferConvertHandler = 
   bufferConvertHandler.factory()
 
-export var makeBufferConvertFilter = 
+export let makeBufferConvertFilter = 
   bufferConvertFilter.factory()

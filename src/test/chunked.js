@@ -14,28 +14,28 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('chunked stream test', () => {
   it('simple stream to chunked stream', async(function*() {
-    var testBuffers = [
+    let testBuffers = [
       'hello',
       'javascript definitely rocks'
     ]
 
-    var testChunkedContent = '5\r\nhello\r\n' +
+    let testChunkedContent = '5\r\nhello\r\n' +
         '1b\r\njavascript definitely rocks\r\n' +
         '0\r\n\r\n'
 
-    var readStream = buffersToStream(testBuffers)
-    var chunkedStream = streamToChunkedStream(readStream)
+    let readStream = buffersToStream(testBuffers)
+    let chunkedStream = streamToChunkedStream(readStream)
 
     yield streamToText(chunkedStream)
       .should.eventually.equal(testChunkedContent)
   }))
 
   it('simple chunked stream to stream', async(function*() {
-    var testBuffers = [
+    let testBuffers = [
       '6',
       '\r\n',
       'hello ',
@@ -49,19 +49,19 @@ describe('chunked stream test', () => {
       '\r\n'
     ]
 
-    var testContent = 'hello javascript definitely rocks'
+    let testContent = 'hello javascript definitely rocks'
 
-    var readStream = buffersToStream(testBuffers)
-    var unchunkedStream = streamToUnchunkedStream(readStream)
+    let readStream = buffersToStream(testBuffers)
+    let unchunkedStream = streamToUnchunkedStream(readStream)
 
     yield streamToText(unchunkedStream)
       .should.eventually.equal(testContent)
   }))
 
   it('bad chunked stream test', async(function*() {
-    var testBuffers = buffers => {
-      var readStream = buffersToStream(buffers)
-      var unchunkedStream = streamToUnchunkedStream(readStream)
+    let testBuffers = buffers => {
+      let readStream = buffersToStream(buffers)
+      let unchunkedStream = streamToUnchunkedStream(readStream)
 
       return streamToText(unchunkedStream)
         .should.be.rejected
@@ -93,7 +93,7 @@ describe('chunked stream test', () => {
   }))
 
   it('complex chunked stream to stream', async(function*() {
-    var testBuffers = [
+    let testBuffers = [
       '6\r',
       '\nhello \r',
       '\n1',
@@ -105,19 +105,19 @@ describe('chunked stream test', () => {
       '\n'
     ]
 
-    var testContent = 'hello javascript definitely rocks'
+    let testContent = 'hello javascript definitely rocks'
 
-    var readStream = buffersToStream(testBuffers)
-    var unchunkedStream = streamToUnchunkedStream(readStream)
+    let readStream = buffersToStream(testBuffers)
+    let unchunkedStream = streamToUnchunkedStream(readStream)
 
     yield streamToText(unchunkedStream)
       .should.eventually.equal(testContent)
   }))
 
   it('combined chunk unchunk test', async(function*() {
-    var unicodeBuffer = new Buffer('世界你好')
+    let unicodeBuffer = new Buffer('世界你好')
 
-    var testBuffers = [
+    let testBuffers = [
       'first ',
       'second ',
       unicodeBuffer.slice(0, 5),
@@ -127,9 +127,9 @@ describe('chunked stream test', () => {
       'fifth'
     ]
 
-    var originalStream = buffersToStream(testBuffers)
-    var chunkedStream = streamToChunkedStream(originalStream)
-    var unchunkedStream = streamToUnchunkedStream(chunkedStream)
+    let originalStream = buffersToStream(testBuffers)
+    let chunkedStream = streamToChunkedStream(originalStream)
+    let unchunkedStream = streamToUnchunkedStream(chunkedStream)
 
     yield streamToText(unchunkedStream).should.eventually.equal(
       'first second 世界你好 third fourth fifth')

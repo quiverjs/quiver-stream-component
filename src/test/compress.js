@@ -21,27 +21,28 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
-var gzip = promisify(zlib.gzip)
-var gunzip = promisify(zlib.gunzip)
+let gzip = promisify(zlib.gzip)
+let gunzip = promisify(zlib.gunzip)
 
-var testContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi viverra felis sed luctus vulputate. Vivamus imperdiet elit neque, vitae hendrerit nisl feugiat ut. Morbi et mauris a lorem placerat porta eu non quam. Vivamus felis eros, venenatis nec faucibus sed, aliquet vel justo. Nam in cursus ex. Morbi a pellentesque nunc. Aliquam quis sodales enim, id cursus turpis. Suspendisse scelerisque nulla vel placerat aliquam.'
+let testContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi viverra felis sed luctus vulputate. Vivamus imperdiet elit neque, vitae hendrerit nisl feugiat ut. Morbi et mauris a lorem placerat porta eu non quam. Vivamus felis eros, venenatis nec faucibus sed, aliquet vel justo. Nam in cursus ex. Morbi a pellentesque nunc. Aliquam quis sodales enim, id cursus turpis. Suspendisse scelerisque nulla vel placerat aliquam.'
 
 describe('compress stream test', () => {
   it('basic gzip compression', async(function*() {
-    var compressed = yield gzip(testContent)
+    let compressed = yield gzip(testContent)
 
-    var uncompressed = yield gunzip(compressed)
+    let uncompressed = yield gunzip(compressed)
     uncompressed.toString().should.equal(testContent)
 
-    var component = compressHandler('gzip')
+    let component = compressHandler()
+      .configOverride({ compressAlgorithm: 'gzip' })
       .setLoader(loadStreamHandler)
 
     var gzipHandler = yield component.loadHandler({})
 
-    var inputStreamable = textToStreamable(testContent)
-    var resultBuffer = yield gzipHandler({}, inputStreamable)
+    let inputStreamable = textToStreamable(testContent)
+    let resultBuffer = yield gzipHandler({}, inputStreamable)
       .then(streamableToBuffer)
 
     should.equal(buffertools.compare(
@@ -49,9 +50,9 @@ describe('compress stream test', () => {
 
     should.exist(inputStreamable.toGzipStreamable)
 
-    var cachedStreamable = yield inputStreamable.toGzipStreamable()
+    let cachedStreamable = yield inputStreamable.toGzipStreamable()
     
-    var cachedBuffer = yield cachedStreamable.toStream()
+    let cachedBuffer = yield cachedStreamable.toStream()
       .then(streamToBuffer)
 
     should.equal(buffertools.compare(
@@ -62,18 +63,18 @@ describe('compress stream test', () => {
         compressAlgorithm: 'gzip'
       })
 
-    var gunzipHandler = compressHandler()
+    let gunzipHandler = compressHandler()
       .configOverride({
         compressAlgorithm: 'gunzip'
       })
 
-    var main = simpleHandler(
+    let main = simpleHandler(
       args => testContent, 
       'void', 'text')
       .middleware(transformFilter(gzipHandler, 'out'))
       .middleware(transformFilter(gunzipHandler, 'out'))
 
-    var handler = yield main.loadHandler({})
+    let handler = yield main.loadHandler({})
 
     yield handler().should.eventually.equal(testContent)
   }))

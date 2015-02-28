@@ -23,25 +23,25 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('buffer convert test', () => {
   it('uppercase handler', async(function*() {
-    var toUpperCase = data =>
+    let toUpperCase = data =>
       data.toString().toUpperCase()
 
-    var component = bufferConvertHandler()
+    let component = bufferConvertHandler()
       .configOverride({
         bufferConverter: toUpperCase
       })
 
-    var handler = yield component.loadHandler({})
+    let handler = yield component.loadHandler({})
 
     yield handler({}, textToStream('Hello World'))
       .then(streamToText)
       .should.eventually.equal('HELLO WORLD')
 
-    var inputStreamable = buffersToStream(
+    let inputStreamable = buffersToStream(
       ['Hell', 'o Wo', 'rld'])
 
     yield handler({}, inputStreamable)
@@ -50,27 +50,27 @@ describe('buffer convert test', () => {
   }))
 
   it('filter convert test', async(function*() {
-    var toUpperCase = data => {
+    let toUpperCase = data => {
       return data.toString().toUpperCase()
     }
 
-    var toLowerCase = data => {
+    let toLowerCase = data => {
       return data.toString().toLowerCase()
     }
 
-    var inFilter = bufferConvertFilter()
+    let inFilter = bufferConvertFilter()
       .configOverride({
         filterMode: 'in',
         bufferConverter: toUpperCase
       })
 
-    var outFilter = bufferConvertFilter()
+    let outFilter = bufferConvertFilter()
       .configOverride({
         filterMode: 'out',
         bufferConverter: toLowerCase
       })
 
-    var component = simpleHandler((args, name) => {
+    let component = simpleHandler((args, name) => {
       name.should.equal('JOHN')
 
       return 'Hello, ' + name
@@ -78,7 +78,7 @@ describe('buffer convert test', () => {
     .middleware(inFilter)
     .middleware(outFilter)
 
-    var handler = yield component.loadHandler({})
+    let handler = yield component.loadHandler({})
 
     yield handler({}, 'John')
       .should.eventually.equal('hello, john')

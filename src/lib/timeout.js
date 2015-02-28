@@ -3,29 +3,29 @@ import { configMiddleware } from 'quiver-core/component'
 import { async, timeout, reject } from 'quiver-core/promise'
 import { makeStreamConvertFilter } from './stream'
 
-export var timeoutStream = (readStream, streamTimeout) => {
-  var originalRead = readStream.read
+export let timeoutStream = (readStream, streamTimeout) => {
+  let originalRead = readStream.read
 
-  var startTimeout = () =>
+  let startTimeout = () =>
     timeout(streamTimeout).then(() =>
       reject(error(408, 'stream timeout')))
 
-  var timeoutRead = () =>
+  let timeoutRead = () =>
     Promise.race([
       originalRead(),
       startTimeout()
     ])
 
-  var newStream = Object.create(readStream)
+  let newStream = Object.create(readStream)
   newStream.read = timeoutRead
 
   return newStream
 }
 
-export var timeoutStreamFilter = makeStreamConvertFilter()
+export let timeoutStreamFilter = makeStreamConvertFilter()
   .middleware(configMiddleware(
   config => {
-    var { 
+    let { 
       filterMode='inout',
       streamTimeout=-1
     } = config
@@ -36,5 +36,5 @@ export var timeoutStreamFilter = makeStreamConvertFilter()
       timeoutStream(readStream, streamTimeout)
   }))
 
-export var makeTimeoutStreamFilter = 
+export let makeTimeoutStreamFilter = 
   timeoutStreamFilter.factory()

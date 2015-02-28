@@ -14,20 +14,18 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('stream checksum test', () => {
   it('sha1sum', async(function*() {
-    var main = checksumHandler()
-      .configOverride({
-        checksumAlgorithm: 'sha1'
-      })
+    let main = checksumHandler()
+      .configOverride({ checksumAlgorithm: 'sha1' })
 
-    var handler = yield main.loadHandler({})
+    let handler = yield main.loadHandler({})
 
-    var testChecksum = '648a6a6ffffdaa0badb23b8baf90b6168dd16b3a'
+    let testChecksum = '648a6a6ffffdaa0badb23b8baf90b6168dd16b3a'
 
-    var streamable = buffersToStreamable([
+    let streamable = buffersToStreamable([
       'Hello ', 'World\n'
     ])
 
