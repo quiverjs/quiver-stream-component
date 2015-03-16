@@ -1,13 +1,13 @@
 import { async } from 'quiver-core/promise'
 import { createChannel } from 'quiver-core/stream-util'
 
-export let pipeSizedBuffer = async(
+export const pipeSizedBuffer = async(
 function*(readStream, writeStream, minSize, maxSize) {
   try {
     let buffer = null
 
     while(true) {
-      let { closed } = yield writeStream.prepareWrite()
+      const { closed } = yield writeStream.prepareWrite()
       if(closed) return readStream.closeRead()
 
       while(!buffer || buffer.length < minSize) {
@@ -28,20 +28,18 @@ function*(readStream, writeStream, minSize, maxSize) {
         }
       }
 
-      let bufferLength = buffer.length
+      const bufferLength = buffer.length
 
       if(bufferLength <= maxSize) {
         writeStream.write(buffer)
         buffer = null
 
       } else {
-        let division = (bufferLength / maxSize) | 0
-
         let sliceStartIndex = 0
         let sliceEndIndex = maxSize
 
         while(sliceEndIndex <= bufferLength) {
-          let slice = buffer.slice(
+          const slice = buffer.slice(
             sliceStartIndex, sliceEndIndex)
 
           writeStream.write(slice)
@@ -66,7 +64,7 @@ function*(readStream, writeStream, minSize, maxSize) {
   }
 })
 
-export let sizeWindowedStream = 
+export const sizeWindowedStream = 
 (rawStream, minSize, maxSize=minSize) => {
   minSize = minSize|0
   maxSize = maxSize|0
@@ -74,7 +72,7 @@ export let sizeWindowedStream =
   if(minSize <= 0 || maxSize < minSize)
     throw new Error('invalid minSize/maxSize')
 
-  let { 
+  const { 
     readStream, writeStream 
   } = createChannel()
 

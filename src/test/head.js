@@ -12,18 +12,18 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-let should = chai.should()
+const should = chai.should()
 
 describe('fixed head extractor test', () => {
   it('trivial fixed head', async(function*() {
-    let testBuffers = [
+    const testBuffers = [
       '1234',
       'hello ',
       'world'
     ]
 
-    let readStream = buffersToStream(testBuffers)
-    let [head, restStream] = yield extractFixedStreamHead(
+    const readStream = buffersToStream(testBuffers)
+    const [head, restStream] = yield extractFixedStreamHead(
       readStream, 4)
 
     head.toString().should.equal('1234')
@@ -33,15 +33,15 @@ describe('fixed head extractor test', () => {
 
 
   it('multiple fixed head', async(function*() {
-    let testBuffers = [
+    const testBuffers = [
       '12',
       '3',
       '4hello ',
       'world'
     ]
 
-    let readStream = buffersToStream(testBuffers)
-    let [head, restStream] = yield extractFixedStreamHead(
+    const readStream = buffersToStream(testBuffers)
+    const [head, restStream] = yield extractFixedStreamHead(
       readStream, 4)
 
     head.toString().should.equal('1234')
@@ -50,18 +50,18 @@ describe('fixed head extractor test', () => {
   }))
 
   it('unicode fixed head', async(function*() {
-    let testHead = '世界你好'
-    let testHeadBuffer = new Buffer(testHead)
+    const testHead = '世界你好'
+    const testHeadBuffer = new Buffer(testHead)
 
-    let testBuffers = [
+    const testBuffers = [
       testHeadBuffer.slice(0, 5),
       testHeadBuffer.slice(5, 10),
       Buffer.concat([testHeadBuffer.slice(10, 12), new Buffer('hell')]),
       'o world'
     ]
 
-    let readStream = buffersToStream(testBuffers)
-    let [head, restStream] = yield extractFixedStreamHead(
+    const readStream = buffersToStream(testBuffers)
+    const [head, restStream] = yield extractFixedStreamHead(
       readStream, 12)
 
     head.toString().should.equal(testHead)
@@ -73,10 +73,10 @@ describe('fixed head extractor test', () => {
 
 describe('stream head dream extractor test', () => {
   it('simple test', async(function*() {
-    let testBuffers = async(function*(buffers) {
-      let readStream = buffersToStream(buffers)
+    const testBuffers = async(function*(buffers) {
+      const readStream = buffersToStream(buffers)
 
-      let [head, restStream] = yield extractStreamHead(
+      const [head, restStream] = yield extractStreamHead(
         readStream, '::')
 
       head.toString().should.equal('hello world')
@@ -107,15 +107,15 @@ describe('stream head dream extractor test', () => {
   }))
 
   it('test beginning separate', async(function*() {
-    let testBuffers = [
+    const testBuffers = [
       ':',
       ':hello ',
       'world'
     ]
 
-    let readStream = buffersToStream(testBuffers)
+    const readStream = buffersToStream(testBuffers)
 
-    let [head, restStream] = yield extractStreamHead(
+    const [head, restStream] = yield extractStreamHead(
       readStream, '::')
 
     head.length.should.equal(0)

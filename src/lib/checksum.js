@@ -1,29 +1,29 @@
 import crypto from 'crypto'
-let { createHash, getHashes } = crypto
+const { createHash, getHashes } = crypto
 
 import { async, reject } from 'quiver-core/promise'
 import { simpleHandlerBuilder } from 'quiver-core/component'
 
-export let checksumStream = async(
+export const checksumStream = async(
 function*(readStream, algorithm) {
-  let checksum = createHash(algorithm)
+  const checksum = createHash(algorithm)
 
   while(true) {
-    let { closed, data } = yield readStream.read()
+    const { closed, data } = yield readStream.read()
     if(closed) return checksum.digest('hex')
 
     checksum.update(data)
   }
 })
 
-export let checksumStreamable = async(
+export const checksumStreamable = async(
 function*(streamable, algorithm, checksumField) {
   if(streamable[checksumField])
     return streamable[checksumField]
 
-  let readStream = yield streamable.toStream()
+  const readStream = yield streamable.toStream()
   
-  let checksum = yield checksumStream(readStream, algorithm)
+  const checksum = yield checksumStream(readStream, algorithm)
 
   if(streamable.reusable)
     streamable[checksumField] = checksum
@@ -31,10 +31,10 @@ function*(streamable, algorithm, checksumField) {
   return checksum
 })
 
-export let checksumHandler = simpleHandlerBuilder(
+export const checksumHandler = simpleHandlerBuilder(
 config => {
-  let { checksumAlgorithm='sha1' } = config
-  let checksumField = 'checksum-' + checksumAlgorithm
+  const { checksumAlgorithm='sha1' } = config
+  const checksumField = 'checksum-' + checksumAlgorithm
 
   if(getHashes().indexOf(checksumAlgorithm) == -1)
     return reject(error(500, 'platform do not ' +
@@ -45,4 +45,4 @@ config => {
 
 }, 'streamable', 'text')
 
-export let makeChecksumHandler = checksumHandler.factory()
+export const makeChecksumHandler = checksumHandler.factory()

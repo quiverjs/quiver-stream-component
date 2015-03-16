@@ -2,19 +2,19 @@ import { async, timeout } from 'quiver-core/promise'
 import { configMiddleware } from 'quiver-core/component'
 import { makeStreamConvertFilter } from './stream'
 
-export let throttledStream = (readStream, throttleRate) => {
+export const throttledStream = (readStream, throttleRate) => {
   throttleRate = throttleRate/10
-  let originalRead = readStream.read
+  const originalRead = readStream.read
 
   let currentRate = 0
   let lastUpdate = Date.now()
   let isClosed = false
 
-  let throttledRead = async(function*() {
+  const throttledRead = async(function*() {
     if(isClosed) return { closed: isClosed }
 
-    let now = Date.now()
-    let timeElapsed = now - lastUpdate
+    const now = Date.now()
+    const timeElapsed = now - lastUpdate
 
     if(timeElapsed > 120) {
       currentRate = 0
@@ -25,7 +25,7 @@ export let throttledStream = (readStream, throttleRate) => {
       lastUpdate = now
     }
 
-    let { closed, data } = yield originalRead()
+    const { closed, data } = yield originalRead()
     if(closed) {
       isClosed = true
       return { closed }
@@ -39,16 +39,16 @@ export let throttledStream = (readStream, throttleRate) => {
     return { data }
   })
 
-  let newStream = Object.create(readStream)
+  const newStream = Object.create(readStream)
   newStream.read = throttledRead
 
   return newStream
 }
 
-export let throttledStreamFilter = makeStreamConvertFilter()
+export const throttledStreamFilter = makeStreamConvertFilter()
   .middleware(configMiddleware(
   config => {
-    let { 
+    const { 
       throttleRate=-1 
     } = config
     
@@ -59,5 +59,5 @@ export let throttledStreamFilter = makeStreamConvertFilter()
       throttledStream(readStream, throttleRate)
   }))
 
-export let makeThrottledStreamFilter = 
+export const makeThrottledStreamFilter = 
   throttledStreamFilter.factory()

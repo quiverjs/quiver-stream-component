@@ -6,17 +6,17 @@ import {
 
 import { makeStreamConvertFilter } from './stream'
 
-let pipeConvert = async(
+const pipeConvert = async(
 function*(converter, readStream, writeStream) {
   try {
     while(true) {
-      let { closed: writeClosed } = yield writeStream.prepareWrite()
+      const { closed: writeClosed } = yield writeStream.prepareWrite()
       if(writeClosed) return readStream.closeRead()
 
-      let { closed, data } = yield readStream.read()
+      const { closed, data } = yield readStream.read()
       if(closed) return writeStream.closeWrite()
 
-      let converted = yield converter(data)
+      const converted = yield converter(data)
 
       writeStream.write(converted)
     }
@@ -30,17 +30,17 @@ function*(converter, readStream, writeStream) {
   }
 })
 
-export let convertStream = (converter, inputStream) => {
-  let { readStream, writeStream } = createChannel()
+export const convertStream = (converter, inputStream) => {
+  const { readStream, writeStream } = createChannel()
 
   pipeConvert(converter, inputStream, writeStream)
   .catch(err=>{})
 
   return readStream
 }
-export let bufferConvertHandler = simpleHandlerBuilder(
+export const bufferConvertHandler = simpleHandlerBuilder(
 config => {
-  let { bufferConverter } = config
+  const { bufferConverter } = config
 
   if(!bufferConverter) throw new Error(
       'config.bufferConverter() required')
@@ -50,10 +50,10 @@ config => {
   }
 }, 'stream', 'stream')
 
-export let bufferConvertFilter = makeStreamConvertFilter()
+export const bufferConvertFilter = makeStreamConvertFilter()
   .middleware(configMiddleware(
   config => {
-    let { bufferConverter } = config
+    const { bufferConverter } = config
 
     if(!bufferConverter) throw new Error(
       'config.bufferConverter() required')
@@ -62,8 +62,8 @@ export let bufferConvertFilter = makeStreamConvertFilter()
       convertStream(bufferConverter, readStream)
   }))
 
-export let makeBufferConvertHandler = 
+export const makeBufferConvertHandler = 
   bufferConvertHandler.factory()
 
-export let makeBufferConvertFilter = 
+export const makeBufferConvertFilter = 
   bufferConvertFilter.factory()

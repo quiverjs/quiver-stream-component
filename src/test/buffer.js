@@ -21,25 +21,25 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-let should = chai.should()
+const should = chai.should()
 
 describe('buffer convert test', () => {
   it('uppercase handler', async(function*() {
-    let toUpperCase = data =>
+    const toUpperCase = data =>
       data.toString().toUpperCase()
 
-    let component = bufferConvertHandler()
+    const component = bufferConvertHandler()
       .configOverride({
         bufferConverter: toUpperCase
       })
 
-    let handler = yield component.loadHandler({})
+    const handler = yield component.loadHandler({})
 
     yield handler({}, textToStream('Hello World'))
       .then(streamToText)
       .should.eventually.equal('HELLO WORLD')
 
-    let inputStreamable = buffersToStream(
+    const inputStreamable = buffersToStream(
       ['Hell', 'o Wo', 'rld'])
 
     yield handler({}, inputStreamable)
@@ -48,27 +48,27 @@ describe('buffer convert test', () => {
   }))
 
   it('filter convert test', async(function*() {
-    let toUpperCase = data => {
+    const toUpperCase = data => {
       return data.toString().toUpperCase()
     }
 
-    let toLowerCase = data => {
+    const toLowerCase = data => {
       return data.toString().toLowerCase()
     }
 
-    let inFilter = bufferConvertFilter()
+    const inFilter = bufferConvertFilter()
       .configOverride({
         filterMode: 'in',
         bufferConverter: toUpperCase
       })
 
-    let outFilter = bufferConvertFilter()
+    const outFilter = bufferConvertFilter()
       .configOverride({
         filterMode: 'out',
         bufferConverter: toLowerCase
       })
 
-    let component = simpleHandler((args, name) => {
+    const component = simpleHandler((args, name) => {
       name.should.equal('JOHN')
 
       return 'Hello, ' + name
@@ -76,7 +76,7 @@ describe('buffer convert test', () => {
     .middleware(inFilter)
     .middleware(outFilter)
 
-    let handler = yield component.loadHandler({})
+    const handler = yield component.loadHandler({})
 
     yield handler({}, 'John')
       .should.eventually.equal('hello, john')

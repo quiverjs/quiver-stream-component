@@ -18,7 +18,7 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-let should = chai.should()
+const should = chai.should()
 
 describe('timeout stream test', () => {
   it('basic test', async(function*() {
@@ -27,7 +27,7 @@ describe('timeout stream test', () => {
 
     writeStream.write('foo')
 
-    let { closed, data } = yield readStream.read()
+    const { closed, data } = yield readStream.read()
     data.should.equal('foo')
 
     yield readStream.read()
@@ -35,18 +35,18 @@ describe('timeout stream test', () => {
   }))
 
   it('timeout filter test', async(function*() {
-    let timeoutFilter = timeoutStreamFilter()
+    const timeoutFilter = timeoutStreamFilter()
       .configOverride({
         filterMode: 'in'
       })
 
-    let component = simpleHandler(
+    const component = simpleHandler(
       (args, name) => 'Hello, ' + name,
       'text', 'text')
     .middleware(timeoutFilter)
     .setLoader(loadStreamHandler)
 
-    let handler = yield component.loadHandler({
+    const handler = yield component.loadHandler({
       streamTimeout: 100
     })
 
@@ -54,10 +54,10 @@ describe('timeout stream test', () => {
       .then(streamableToText)
       .should.eventually.equal('Hello, World')
 
-    let { readStream, writeStream } = createChannel()
+    const { readStream, writeStream } = createChannel()
     writeStream.write('foo')
 
-    let streamable = streamToStreamable(readStream)
+    const streamable = streamToStreamable(readStream)
 
     yield handler({}, streamable)
       .should.be.rejected

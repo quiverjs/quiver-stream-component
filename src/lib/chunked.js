@@ -7,7 +7,7 @@ import {
 } from 'quiver-core/stream-util'
 
 import buffertools from 'buffertools'
-let { 
+const { 
   compare: compareBuffer,
   indexOf
 } = buffertools
@@ -16,26 +16,26 @@ import {
   extractStreamHead, extractFixedStreamHead 
 } from './head'
 
-let pipeChunkedStream = async(
+const pipeChunkedStream = async(
 function*(readStream, writeStream, options={}) {
   try {
     while(true) {
-      let { closed: writeClosed } = yield writeStream.prepareWrite()
+      const { closed: writeClosed } = yield writeStream.prepareWrite()
 
       if(writeClosed) return readStream.closeRead()
 
       let { closed, data } = yield readStream.read()
 
       if(closed) {
-        let chunkHead = '0\r\n\r\n'
+        const chunkHead = '0\r\n\r\n'
         writeStream.write(chunkHead)
         writeStream.closeWrite()
         return
       }
 
       if(!Buffer.isBuffer(data)) data = new Buffer(data)
-      let chunkSize = data.length
-      let chunkHead = chunkSize.toString(16) + '\r\n'
+      const chunkSize = data.length
+      const chunkHead = chunkSize.toString(16) + '\r\n'
 
       writeStream.write(chunkHead)
       writeStream.write(data)
@@ -50,13 +50,14 @@ function*(readStream, writeStream, options={}) {
   }
 })
 
-let chunkSeparator = new Buffer('\r\n')
+const chunkSeparator = new Buffer('\r\n')
 
-let extractTrailingHeaders = async(function*(readStream) {
-  let headers = []
+const extractTrailingHeaders = async(function*(readStream) {
+  const headers = []
 
   while(true) {
-    var [head, readStream] = yield extractStreamHead(
+    let head
+    ;([head, readStream]) = yield extractStreamHead(
       readStream, chunkSeparator)
 
     if(head.length == 0) return headers
@@ -64,16 +65,16 @@ let extractTrailingHeaders = async(function*(readStream) {
   }
 })
 
-let pipeChunk = async(function*(readStream, writeStream, size) {
+const pipeChunk = async(function*(readStream, writeStream, size) {
   while(true) {
-    let { closed: writeClosed } = yield writeStream.prepareWrite()
+    const { closed: writeClosed } = yield writeStream.prepareWrite()
     if(writeClosed) return readStream.closeRead()
 
     let { closed, data } = yield readStream.read()
     if(closed) throw error(400, 'Bad Request')
 
     if(!Buffer.isBuffer(data)) data = new Buffer(data)
-    let bufferSize = data.length
+    const bufferSize = data.length
 
     if(bufferSize == size) {
       writeStream.write(data)
@@ -81,8 +82,8 @@ let pipeChunk = async(function*(readStream, writeStream, size) {
     }
 
     if(bufferSize > size) {
-      let head = data.slice(0, size)
-      let rest = data.slice(size)
+      const head = data.slice(0, size)
+      const rest = data.slice(size)
 
       writeStream.write(head)
       return pushbackStream(readStream, [rest])
@@ -93,15 +94,16 @@ let pipeChunk = async(function*(readStream, writeStream, size) {
   }
 })
 
-let pipeUnchunkedStream = async(
+const pipeUnchunkedStream = async(
 function*(readStream, writeStream, options={}) {
   try {
     while(true) {
-      var [chunkHead, readStream] = yield extractStreamHead(
+      let chunkHead
+      ;([chunkHead, readStream]) = yield extractStreamHead(
         readStream, chunkSeparator)
 
       let chunkSizeText = chunkHead
-      let extensionIndex = indexOf(chunkHead, ';')
+      const extensionIndex = indexOf(chunkHead, ';')
       if(extensionIndex != -1) {
         chunkSizeText = chunkHead.slice(0, extensionIndex)
       }
@@ -112,9 +114,9 @@ function*(readStream, writeStream, options={}) {
         throw error(400, 'malformed chunked stream')
       }
 
-      let chunkSize = parseInt(chunkSizeText, 16)
+      const chunkSize = parseInt(chunkSizeText, 16)
       if(chunkSize == 0) {
-        let trailingHeaders = yield extractTrailingHeaders(readStream)
+        const trailingHeaders = yield extractTrailingHeaders(readStream)
         writeStream.closeWrite()
         readStream.closeRead()
         return
@@ -122,7 +124,8 @@ function*(readStream, writeStream, options={}) {
       }
 
       readStream = yield pipeChunk(readStream, writeStream, chunkSize)
-      var [head, readStream] = yield extractFixedStreamHead(readStream, 2)
+      let head
+      ;([head, readStream]) = yield extractFixedStreamHead(readStream, 2)
 
       if(compareBuffer(head, chunkSeparator) != 0)
         throw error(400, 'Bad Request')
@@ -137,34 +140,34 @@ function*(readStream, writeStream, options={}) {
   }
 })
 
-export let streamToChunkedStream = unchunkedStream => {
-  let { readStream, writeStream } = createChannel()
+export const streamToChunkedStream = unchunkedStream => {
+  const { readStream, writeStream } = createChannel()
 
   pipeChunkedStream(unchunkedStream, writeStream)
 
   return readStream
 }
 
-export let streamToUnchunkedStream = chunkedStream => {
-  let { readStream, writeStream } = createChannel()
+export const streamToUnchunkedStream = chunkedStream => {
+  const { readStream, writeStream } = createChannel()
 
   pipeUnchunkedStream(chunkedStream, writeStream)
 
   return readStream
 }
 
-export let chunkedTransformHandler = simpleHandler(
+export const chunkedTransformHandler = simpleHandler(
 (args, inputStream) =>
   streamToChunkedStream(inputStream),
 'stream', 'stream')
 
-export let unchunkedTransformHandler = simpleHandler(
+export const unchunkedTransformHandler = simpleHandler(
 (args, inputStream) =>
   streamToUnchunkedStream(inputStream),
 'stream', 'stream')
 
-export let makeChunkedTransformHandler = 
+export const makeChunkedTransformHandler = 
   chunkedTransformHandler.factory()
 
-export let makeUnchunkedTransformHandler = 
+export const makeUnchunkedTransformHandler = 
   unchunkedTransformHandler.factory()

@@ -1,12 +1,12 @@
 import { streamFilter } from 'quiver-core/component'
 
-export let convertStreamable = 
+export const convertStreamable = 
 (converter, streamable, inReplace) => {
-  let originalToStream = streamable.toStream
+  const originalToStream = streamable.toStream
   if(!originalToStream) throw new Error(
     'streamable do not have toStream() method')
 
-  let convertedToStream = () =>
+  const convertedToStream = () =>
     originalToStream().then(converter)
 
   if(inReplace) {
@@ -18,16 +18,16 @@ export let convertStreamable =
   } 
 }
 
-let streamableConverter = (streamConverter, active, inReplace) => {
+const streamableConverter = (streamConverter, active, inReplace) => {
   if(!active) return streamable => streamable
 
   return streamable =>
     convertStreamable(streamConverter, streamable, inReplace)
 }
 
-export let streamConvertFilter = streamFilter(
+export const streamConvertFilter = streamFilter(
 (config, handler) => {
-  let {
+  const {
     filterMode: mode,
     streamConverter,  
     replaceStreamable=false
@@ -39,13 +39,13 @@ export let streamConvertFilter = streamFilter(
   if(!(mode == 'in' || mode == 'out' || mode == 'inout'))
     throw new Error('invalid stream convert mode')
 
-  let inMode = (mode == 'in' || mode == 'inout')
-  let outMode = (mode == 'out' || mode == 'inout')
+  const inMode = (mode == 'in' || mode == 'inout')
+  const outMode = (mode == 'out' || mode == 'inout')
 
-  let inConvert = streamableConverter(
+  const inConvert = streamableConverter(
     streamConverter, inMode, replaceStreamable)
 
-  let outConvert = streamableConverter(
+  const outConvert = streamableConverter(
     streamConverter, outMode, replaceStreamable)
 
   return (args, inputStreamable) => {
@@ -54,5 +54,5 @@ export let streamConvertFilter = streamFilter(
   }
 })
 
-export let makeStreamConvertFilter = 
+export const makeStreamConvertFilter = 
   streamConvertFilter.factory()
