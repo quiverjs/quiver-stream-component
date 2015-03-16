@@ -52,9 +52,10 @@ export let compressStream = (algorithm, readStream) => {
 }
 
 export let compressStreamable = async(
-function*(algorithm, streamable, 
-  toCompressStreamable=compressField(algorithm)) 
-{
+function*(algorithm, streamable, toCompressStreamable) {
+  if(!toCompressStreamable)
+    toCompressStreamable=compressField(algorithm)
+
   if(streamable[toCompressStreamable]) 
     return streamable[toCompressStreamable]()
 
@@ -81,9 +82,10 @@ config => {
 
   let field = compressField(compressAlgorithm)
 
-  return (args, inputStreamable) => 
-    compressStreamable(compressAlgorithm, 
+  return (args, inputStreamable) => {
+    return compressStreamable(compressAlgorithm, 
       inputStreamable, field)
+  }
 })
 
 export let makeCompressHandler = compressHandler.factory()

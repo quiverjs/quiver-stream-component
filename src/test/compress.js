@@ -1,4 +1,3 @@
-import 'quiver-core/traceur'
 import zlib from 'zlib'
 import buffertools from 'buffertools'
 import { async, promisify } from 'quiver-core/promise'
@@ -42,8 +41,10 @@ describe('compress stream test', () => {
     var gzipHandler = yield component.loadHandler({})
 
     let inputStreamable = textToStreamable(testContent)
-    let resultBuffer = yield gzipHandler({}, inputStreamable)
-      .then(streamableToBuffer)
+
+    let resultStreamable = yield gzipHandler({}, inputStreamable)
+
+    let resultBuffer = yield streamableToBuffer(resultStreamable)
 
     should.equal(buffertools.compare(
       resultBuffer, compressed), 0)
