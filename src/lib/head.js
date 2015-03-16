@@ -3,9 +3,6 @@ import { async } from 'quiver-core/promise'
 import { pushbackStream } from 'quiver-core/stream-util'
 import { streamFilter } from 'quiver-core/component'
 
-import buffertools from 'buffertools'
-const { indexOf } = buffertools
-
 export const extractStreamHead = async(
 function*(readStream, separator, options={}) {
   const { maxLength=-1 } = options
@@ -26,7 +23,7 @@ function*(readStream, separator, options={}) {
     const previousBufferSize = headBuffer.length
     headBuffer = Buffer.concat([headBuffer, data])
 
-    const separatorIndex = indexOf(headBuffer, separator)
+    const separatorIndex = headBuffer.indexOf(separator)
     if(separatorIndex != -1) {
       const headContent = headBuffer.slice(0, separatorIndex)
 

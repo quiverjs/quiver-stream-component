@@ -1,5 +1,4 @@
 import zlib from 'zlib'
-import buffertools from 'buffertools'
 import { async, promisify } from 'quiver-core/promise'
 
 import { 
@@ -46,7 +45,7 @@ describe('compress stream test', () => {
 
     const resultBuffer = yield streamableToBuffer(resultStreamable)
 
-    should.equal(buffertools.compare(
+    should.equal(Buffer.compare(
       resultBuffer, compressed), 0)
 
     should.exist(inputStreamable.toGzipStreamable)
@@ -56,7 +55,7 @@ describe('compress stream test', () => {
     const cachedBuffer = yield cachedStreamable.toStream()
       .then(streamToBuffer)
 
-    should.equal(buffertools.compare(
+    should.equal(Buffer.compare(
       resultBuffer, compressed), 0)
 
     gzipHandler = compressHandler()

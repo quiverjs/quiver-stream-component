@@ -6,12 +6,6 @@ import {
   createChannel, pushbackStream 
 } from 'quiver-core/stream-util'
 
-import buffertools from 'buffertools'
-const { 
-  compare: compareBuffer,
-  indexOf
-} = buffertools
-
 import { 
   extractStreamHead, extractFixedStreamHead 
 } from './head'
@@ -103,7 +97,7 @@ function*(readStream, writeStream, options={}) {
         readStream, chunkSeparator)
 
       let chunkSizeText = chunkHead
-      const extensionIndex = indexOf(chunkHead, ';')
+      const extensionIndex = chunkHead.indexOf(';')
       if(extensionIndex != -1) {
         chunkSizeText = chunkHead.slice(0, extensionIndex)
       }
@@ -127,7 +121,7 @@ function*(readStream, writeStream, options={}) {
       let head
       ;([head, readStream]) = yield extractFixedStreamHead(readStream, 2)
 
-      if(compareBuffer(head, chunkSeparator) != 0)
+      if(Buffer.compare(head, chunkSeparator) != 0)
         throw error(400, 'Bad Request')
     }
 
