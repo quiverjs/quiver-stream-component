@@ -1,17 +1,17 @@
 import zlib from 'zlib'
-import { async, promisify } from 'quiver-core/promise'
+import { async, promisify } from 'quiver/promise'
 
 import { 
   simpleHandler,
   transformFilter,
   loadStreamHandler 
-} from 'quiver-core/component'
+} from 'quiver/component'
 
 import { 
   textToStreamable, 
   streamToBuffer,
   streamableToBuffer,
-} from 'quiver-core/stream-util'
+} from 'quiver/stream-util'
 
 import { compressHandler } from '../lib/stream-component'
 

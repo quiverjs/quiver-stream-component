@@ -1,10 +1,10 @@
-import { error } from 'quiver-core/error'
-import { async } from 'quiver-core/promise'
-import { simpleHandler } from 'quiver-core/component'
+import { error } from 'quiver/error'
+import { async } from 'quiver/promise'
+import { simpleHandler } from 'quiver/component'
 
 import { 
   createChannel, pushbackStream 
-} from 'quiver-core/stream-util'
+} from 'quiver/stream-util'
 
 import { 
   extractStreamHead, extractFixedStreamHead 

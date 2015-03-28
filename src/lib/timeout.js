@@ -1,6 +1,6 @@
-import { error } from 'quiver-core/error'
-import { configMiddleware } from 'quiver-core/component'
-import { async, timeout, reject } from 'quiver-core/promise'
+import { error } from 'quiver/error'
+import { configMiddleware } from 'quiver/component'
+import { async, timeout, reject } from 'quiver/promise'
 import { makeStreamConvertFilter } from './stream'
 
 export const timeoutStream = (readStream, streamTimeout) => {

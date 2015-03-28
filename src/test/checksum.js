@@ -1,8 +1,8 @@
-import { async } from 'quiver-core/promise'
+import { async } from 'quiver/promise'
 
 import {
   buffersToStreamable
-} from 'quiver-core/stream-util'
+} from 'quiver/stream-util'
 
 import {
   checksumHandler

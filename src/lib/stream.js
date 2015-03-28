@@ -1,4 +1,4 @@
-import { streamFilter } from 'quiver-core/component'
+import { streamFilter } from 'quiver/component'
 
 export const convertStreamable = 
 (converter, streamable, inReplace) => {

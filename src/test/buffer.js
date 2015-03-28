@@ -1,15 +1,15 @@
-import { async } from 'quiver-core/promise'
+import { async } from 'quiver/promise'
 
 import {
   simpleHandler,
   simpleHandlerLoader
-} from 'quiver-core/component'
+} from 'quiver/component'
 
 import {
   textToStream,
   streamToText,
   buffersToStream
-} from 'quiver-core/stream-util'
+} from 'quiver/stream-util'
 
 import {
   bufferConvertHandler,

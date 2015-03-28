@@ -1,13 +1,13 @@
-import { async } from 'quiver-core/promise'
+import { async } from 'quiver/promise'
 
 import { 
   simpleHandler, loadStreamHandler
-} from 'quiver-core/component'
+} from 'quiver/component'
 
 import {
   createChannel, textToStreamable, 
   streamableToText, streamToStreamable
-} from 'quiver-core/stream-util'
+} from 'quiver/stream-util'
 
 import {
   timeoutStream,

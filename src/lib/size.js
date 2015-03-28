@@ -1,5 +1,5 @@
-import { async } from 'quiver-core/promise'
-import { createChannel } from 'quiver-core/stream-util'
+import { async } from 'quiver/promise'
+import { createChannel } from 'quiver/stream-util'
 
 export const pipeSizedBuffer = async(
 function*(readStream, writeStream, minSize, maxSize) {

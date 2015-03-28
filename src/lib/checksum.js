@@ -1,8 +1,8 @@
 import crypto from 'crypto'
 const { createHash, getHashes } = crypto
 
-import { async, reject } from 'quiver-core/promise'
-import { simpleHandlerBuilder } from 'quiver-core/component'
+import { async, reject } from 'quiver/promise'
+import { simpleHandlerBuilder } from 'quiver/component'
 
 export const checksumStream = async(
 function*(readStream, algorithm) {

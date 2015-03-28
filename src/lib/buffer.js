@@ -1,8 +1,8 @@
-import { async } from 'quiver-core/promise'
-import { createChannel } from 'quiver-core/stream-util'
+import { async } from 'quiver/promise'
+import { createChannel } from 'quiver/stream-util'
 import { 
   simpleHandlerBuilder, configMiddleware 
-} from 'quiver-core/component'
+} from 'quiver/component'
 
 import { makeStreamConvertFilter } from './stream'
 

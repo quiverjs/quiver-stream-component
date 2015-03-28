@@ -1,7 +1,7 @@
-import { error } from 'quiver-core/error'
-import { async } from 'quiver-core/promise'
-import { pushbackStream } from 'quiver-core/stream-util'
-import { streamFilter } from 'quiver-core/component'
+import { error } from 'quiver/error'
+import { async } from 'quiver/promise'
+import { pushbackStream } from 'quiver/stream-util'
+import { streamFilter } from 'quiver/component'
 
 export const extractStreamHead = async(
 function*(readStream, separator, options={}) {

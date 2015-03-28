@@ -1,5 +1,5 @@
-import { async, timeout } from 'quiver-core/promise'
-import { configMiddleware } from 'quiver-core/component'
+import { async, timeout } from 'quiver/promise'
+import { configMiddleware } from 'quiver/component'
 import { makeStreamConvertFilter } from './stream'
 
 export const throttledStream = (readStream, throttleRate) => {

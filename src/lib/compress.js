@@ -1,7 +1,7 @@
 import zlib from 'zlib'
 
-import { async, resolve } from 'quiver-core/promise'
-import { streamHandlerBuilder } from 'quiver-core/component'
+import { async, resolve } from 'quiver/promise'
+import { streamHandlerBuilder } from 'quiver/component'
 
 import { 
   pipeStream,
@@ -9,7 +9,7 @@ import {
   streamToStreamable,
   nodeToQuiverReadStream,
   nodeToQuiverWriteStream,
-} from 'quiver-core/stream-util'
+} from 'quiver/stream-util'
 
 export const compressorTable = {
   gzip: zlib.createGzip,
