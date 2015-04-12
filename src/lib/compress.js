@@ -52,10 +52,7 @@ export const compressStream = (algorithm, readStream) => {
 }
 
 export const compressStreamable = async(
-function*(algorithm, streamable, toCompressStreamable) {
-  if(!toCompressStreamable)
-    toCompressStreamable=compressField(algorithm)
-
+function*(algorithm, streamable, toCompressStreamable=compressField(algorithm)) {
   if(streamable[toCompressStreamable]) 
     return streamable[toCompressStreamable]()
 

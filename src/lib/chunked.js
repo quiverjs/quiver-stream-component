@@ -51,7 +51,7 @@ const extractTrailingHeaders = async(function*(readStream) {
 
   while(true) {
     let head
-    ;([head, readStream]) = yield extractStreamHead(
+    ;[head, readStream] = yield extractStreamHead(
       readStream, chunkSeparator)
 
     if(head.length == 0) return headers
@@ -93,7 +93,7 @@ function*(readStream, writeStream, options={}) {
   try {
     while(true) {
       let chunkHead
-      ;([chunkHead, readStream]) = yield extractStreamHead(
+      ;[chunkHead, readStream] = yield extractStreamHead(
         readStream, chunkSeparator)
 
       let chunkSizeText = chunkHead
@@ -119,7 +119,7 @@ function*(readStream, writeStream, options={}) {
 
       readStream = yield pipeChunk(readStream, writeStream, chunkSize)
       let head
-      ;([head, readStream]) = yield extractFixedStreamHead(readStream, 2)
+      ;[head, readStream] = yield extractFixedStreamHead(readStream, 2)
 
       if(Buffer.compare(head, chunkSeparator) != 0)
         throw error(400, 'Bad Request')
