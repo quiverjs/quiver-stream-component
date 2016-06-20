@@ -1,15 +1,14 @@
 import zlib from 'zlib'
 
-import { async, resolve } from 'quiver/promise'
-import { streamHandlerBuilder } from 'quiver/component'
+import { streamHandlerBuilder } from 'quiver-core/component/constructor'
 
-import { 
+import {
   pipeStream,
   reuseStream,
   streamToStreamable,
   nodeToQuiverReadStream,
   nodeToQuiverWriteStream,
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
 export const compressorTable = {
   gzip: zlib.createGzip,
@@ -43,7 +42,7 @@ const pipeNodeTransform = (readStream, nodeStream) => {
 export const compressStream = (algorithm, readStream) => {
   const createCompressor = compressorTable[algorithm]
 
-  if(!createCompressor) 
+  if(!createCompressor)
     throw new Error('invalid compression algorithm')
 
   const compressor = createCompressor()
@@ -51,12 +50,13 @@ export const compressStream = (algorithm, readStream) => {
   return pipeNodeTransform(readStream, compressor)
 }
 
-export const compressStreamable = async(
-function*(algorithm, streamable, toCompressStreamable=compressField(algorithm)) {
-  if(streamable[toCompressStreamable]) 
+export const compressStreamable = async function(
+  algorithm, streamable, toCompressStreamable=compressField(algorithm))
+{
+  if(streamable[toCompressStreamable])
     return streamable[toCompressStreamable]()
 
-  const readStream = yield streamable.toStream()
+  const readStream = await streamable.toStream()
   const compressedStream = compressStream(algorithm, readStream)
 
   if(!streamable.reusable)
@@ -65,14 +65,14 @@ function*(algorithm, streamable, toCompressStreamable=compressField(algorithm)) 
   const compressedStreamable = reuseStream(compressedStream)
 
   streamable[toCompressStreamable] = () =>
-    resolve(compressedStreamable)
+    Promise.resolve(compressedStreamable)
 
   return compressedStreamable
-})
+}
 
 export const compressHandler = streamHandlerBuilder(
 config => {
-  const { compressAlgorithm='gzip' } = config
+  const compressAlgorithm = config.get('compressAlgorithm', 'gzip')
 
   if(!compressorTable[compressAlgorithm])
     throw new Error('invalid compression algorithm')
@@ -80,9 +80,9 @@ config => {
   const field = compressField(compressAlgorithm)
 
   return (args, inputStreamable) => {
-    return compressStreamable(compressAlgorithm, 
+    return compressStreamable(compressAlgorithm,
       inputStreamable, field)
   }
 })
 
-export const makeCompressHandler = compressHandler.factory()
+export const makeCompressHandler = compressHandler.export()

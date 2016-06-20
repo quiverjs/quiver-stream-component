@@ -1,17 +1,13 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
+
+import { asyncTest } from 'quiver-core/util/tape'
 
 import {
   buffersToStream,
   streamToBuffers
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
 import { throttledStream } from '../lib/throttle'
-
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
 
 const testRate = 1024
 
@@ -20,15 +16,15 @@ for(let i=0; i<10; i++) {
   testBuffers.push(new Buffer(128))
 }
 
-describe('throttle test', () => {
-  it('basic throttle', async(function*() {
-    let readStream = buffersToStream(testBuffers)
-    readStream = throttledStream(readStream, testRate)
+test('throttle test', assert => {
+  assert::asyncTest('basic throttle', async function(assert) {
+    const readStream1 = buffersToStream(testBuffers)
+    const readStream = throttledStream(readStream1, testRate)
 
     const start = Date.now()
 
-    yield streamToBuffers(readStream)
-      .should.eventually.eql(testBuffers)
+    const result = await streamToBuffers(readStream)
+    assert.deepEqual(result, testBuffers)
 
     const end = Date.now()
     const diff = end - start
@@ -36,5 +32,7 @@ describe('throttle test', () => {
     if(diff < 1000 || diff > 1500) {
       throw new Error('Expect throttled stream to finish in 1 second')
     }
-  }))
+
+    assert.end()
+  })
 })

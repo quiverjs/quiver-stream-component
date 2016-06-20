@@ -1,21 +1,26 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
+
+import { asyncTest, rejected } from 'quiver-core/util/tape'
+
+import {
+  overrideConfig
+} from 'quiver-core/component/method'
+
+import {
+  loadHandler, createConfig, createArgs
+} from 'quiver-core/component/util'
+
 import {
   streamToText,
   buffersToStream
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
-import { 
-  streamToChunkedStream, streamToUnchunkedStream 
-} from '../lib/stream-component'
+import {
+  streamToChunkedStream, streamToUnchunkedStream
+} from '../lib'
 
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
-
-describe('chunked stream test', () => {
-  it('simple stream to chunked stream', async(function*() {
+test('chunked stream test', assert => {
+  assert::asyncTest('simple stream to chunked stream', async function(assert) {
     const testBuffers = [
       'hello',
       'javascript definitely rocks'
@@ -28,11 +33,13 @@ describe('chunked stream test', () => {
     const readStream = buffersToStream(testBuffers)
     const chunkedStream = streamToChunkedStream(readStream)
 
-    yield streamToText(chunkedStream)
-      .should.eventually.equal(testChunkedContent)
-  }))
+    const result = await streamToText(chunkedStream)
+    assert.equal(result, testChunkedContent)
 
-  it('simple chunked stream to stream', async(function*() {
+    assert.end()
+  })
+
+  assert::asyncTest('simple chunked stream to stream', async function(assert) {
     const testBuffers = [
       '6',
       '\r\n',
@@ -52,20 +59,21 @@ describe('chunked stream test', () => {
     const readStream = buffersToStream(testBuffers)
     const unchunkedStream = streamToUnchunkedStream(readStream)
 
-    yield streamToText(unchunkedStream)
-      .should.eventually.equal(testContent)
-  }))
+    const result = await streamToText(unchunkedStream)
+    assert.equal(result, testContent)
 
-  it('bad chunked stream test', async(function*() {
-    const testBuffers = buffers => {
+    assert.end()
+  })
+
+  assert::asyncTest('bad chunked stream test', async function(assert) {
+    const testBuffers = async (buffers) => {
       const readStream = buffersToStream(buffers)
       const unchunkedStream = streamToUnchunkedStream(readStream)
 
-      return streamToText(unchunkedStream)
-        .should.be.rejected
+      await assert::rejected(streamToText(unchunkedStream))
     }
 
-    yield testBuffers([
+    await testBuffers([
       '3', // wrong count
       '\r\n',
       'hello',
@@ -75,7 +83,7 @@ describe('chunked stream test', () => {
       '\r\n'
     ])
 
-    yield testBuffers([
+    await testBuffers([
       '5\r\n',
       'hello',
       '\r\n',
@@ -83,14 +91,16 @@ describe('chunked stream test', () => {
       '\r\n' // missing last \r\n
     ])
 
-    yield testBuffers([
+    await testBuffers([
       '5\r\n',
       'hello',
       '\r\n' // no trailer
     ])
-  }))
 
-  it('complex chunked stream to stream', async(function*() {
+    assert.end()
+  })
+
+  assert::asyncTest('complex chunked stream to stream', async function(assert) {
     const testBuffers = [
       '6\r',
       '\nhello \r',
@@ -108,11 +118,13 @@ describe('chunked stream test', () => {
     const readStream = buffersToStream(testBuffers)
     const unchunkedStream = streamToUnchunkedStream(readStream)
 
-    yield streamToText(unchunkedStream)
-      .should.eventually.equal(testContent)
-  }))
+    const result = await streamToText(unchunkedStream)
+    assert.equal(result, testContent)
 
-  it('combined chunk unchunk test', async(function*() {
+    assert.end()
+  })
+
+  assert::asyncTest('combined chunk unchunk test', async function(assert) {
     const unicodeBuffer = new Buffer('世界你好')
 
     const testBuffers = [
@@ -129,7 +141,10 @@ describe('chunked stream test', () => {
     const chunkedStream = streamToChunkedStream(originalStream)
     const unchunkedStream = streamToUnchunkedStream(chunkedStream)
 
-    yield streamToText(unchunkedStream).should.eventually.equal(
-      'first second 世界你好 third fourth fifth')
-  }))
+    const result = await streamToText(unchunkedStream)
+
+    assert.equal(result, 'first second 世界你好 third fourth fifth')
+
+    assert.end()
+  })
 })

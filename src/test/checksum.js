@@ -1,25 +1,30 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
+
+import { asyncTest } from 'quiver-core/util/tape'
+
+import {
+  overrideConfig
+} from 'quiver-core/component/method'
+
+import {
+  loadHandler, createConfig, createArgs
+} from 'quiver-core/component/util'
 
 import {
   buffersToStreamable
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
 import {
   checksumHandler
-} from '../lib/stream-component'
+} from '../lib'
 
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
-
-describe('stream checksum test', () => {
-  it('sha1sum', async(function*() {
+test('stream checksum test', assert => {
+  assert::asyncTest('sha1sum', async function(assert) {
     const main = checksumHandler()
-      .configOverride({ checksumAlgorithm: 'sha1' })
+      ::overrideConfig({ checksumAlgorithm: 'sha1' })
 
-    const handler = yield main.loadHandler({})
+    const config = createConfig({})
+    const handler = await loadHandler(config, main)
 
     const testChecksum = '648a6a6ffffdaa0badb23b8baf90b6168dd16b3a'
 
@@ -27,11 +32,13 @@ describe('stream checksum test', () => {
       'Hello ', 'World\n'
     ])
 
-    yield handler({}, streamable)
-      .should.eventually.equal(
-        testChecksum)
+    const args = createArgs()
+    const result= await handler(args, streamable)
+    assert.equal(result, testChecksum)
 
-    should.exist(streamable['checksum-sha1'])
-    streamable['checksum-sha1'].should.equal(testChecksum)
-  }))
+    assert.ok(streamable['checksum-sha1'])
+    assert.equal(streamable['checksum-sha1'], testChecksum)
+
+    assert.end()
+  })
 })

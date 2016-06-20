@@ -1,90 +1,101 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
+
+import { asyncTest } from 'quiver-core/util/tape'
+
+import {
+  overrideConfig
+} from 'quiver-core/component/method'
+
+import {
+  loadHandler, createConfig, createArgs
+} from 'quiver-core/component/util'
+
 import {
   streamToText,
   buffersToStream
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
-import { 
-  extractStreamHead, extractFixedStreamHead 
-} from '../lib/stream-component'
+import {
+  extractStreamHead, extractFixedStreamHead
+} from '../lib'
 
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
-
-describe('fixed head extractor test', () => {
-  it('trivial fixed head', async(function*() {
-    const testBuffers = [
+test('fixed head extractor test', assert => {
+  assert::asyncTest('trivial fixed head', async function(assert) {
+    const assertBuffers = [
       '1234',
       'hello ',
       'world'
     ]
 
-    const readStream = buffersToStream(testBuffers)
-    const [head, restStream] = yield extractFixedStreamHead(
+    const readStream = buffersToStream(assertBuffers)
+    const [head, restStream] = await extractFixedStreamHead(
       readStream, 4)
 
-    head.toString().should.equal('1234')
-    yield streamToText(restStream)
-      .should.eventually.equal('hello world')
-  }))
+    assert.equal(head.toString(), '1234')
+    const result = await streamToText(restStream)
+    assert.equal(result, 'hello world')
 
+    assert.end()
+  })
 
-  it('multiple fixed head', async(function*() {
-    const testBuffers = [
+  assert::asyncTest('multiple fixed head', async function(assert) {
+    const assertBuffers = [
       '12',
       '3',
       '4hello ',
       'world'
     ]
 
-    const readStream = buffersToStream(testBuffers)
-    const [head, restStream] = yield extractFixedStreamHead(
+    const readStream = buffersToStream(assertBuffers)
+    const [head, restStream] = await extractFixedStreamHead(
       readStream, 4)
 
-    head.toString().should.equal('1234')
-    yield streamToText(restStream)
-      .should.eventually.equal('hello world')
-  }))
+    assert.equal(head.toString(), '1234')
 
-  it('unicode fixed head', async(function*() {
+    const result = await streamToText(restStream)
+    assert.equal(result, 'hello world')
+
+    assert.end()
+  })
+
+  assert::asyncTest('unicode fixed head', async function(assert) {
     const testHead = '世界你好'
     const testHeadBuffer = new Buffer(testHead)
 
-    const testBuffers = [
+    const assertBuffers = [
       testHeadBuffer.slice(0, 5),
       testHeadBuffer.slice(5, 10),
       Buffer.concat([testHeadBuffer.slice(10, 12), new Buffer('hell')]),
       'o world'
     ]
 
-    const readStream = buffersToStream(testBuffers)
-    const [head, restStream] = yield extractFixedStreamHead(
+    const readStream = buffersToStream(assertBuffers)
+    const [head, restStream] = await extractFixedStreamHead(
       readStream, 12)
 
-    head.toString().should.equal(testHead)
+    assert.equal(head.toString(), testHead)
 
-    yield streamToText(restStream)
-      .should.eventually.equal('hello world')
-  }))
+    const result = await streamToText(restStream)
+    assert.equal(result, 'hello world')
+
+    assert.end()
+  })
 })
 
-describe('stream head dream extractor test', () => {
-  it('simple test', async(function*() {
-    const testBuffers = async(function*(buffers) {
+test('stream head dream extractor test', (assert) => {
+  assert::asyncTest('simple test', async function() {
+    const assertBuffers = async function(buffers) {
       const readStream = buffersToStream(buffers)
 
-      const [head, restStream] = yield extractStreamHead(
+      const [head, restStream] = await extractStreamHead(
         readStream, '::')
 
-      head.toString().should.equal('hello world')
-      yield streamToText(restStream)
-        .should.eventually.equal('goodbye dream')
-    })
+      assert.equal(head.toString(), 'hello world')
+      const result = await streamToText(restStream)
+      assert.equal(result, 'goodbye dream')
+    }
 
-    yield testBuffers([
+    await assertBuffers([
       'hello ',
       'world',
       '::',
@@ -92,35 +103,39 @@ describe('stream head dream extractor test', () => {
       'dream'
     ])
 
-    yield testBuffers([
+    await assertBuffers([
       'hello ',
       'world::goodbye ',
       'dream'
     ])
 
-    yield testBuffers([
+    await assertBuffers([
       'hello ',
       'world:',
       ':goodbye ',
       'dream'
     ])
-  }))
 
-  it('test beginning separate', async(function*() {
-    const testBuffers = [
+    assert.end()
+  })
+
+  assert::asyncTest('test beginning separate', async function(assert) {
+    const assertBuffers = [
       ':',
       ':hello ',
       'world'
     ]
 
-    const readStream = buffersToStream(testBuffers)
+    const readStream = buffersToStream(assertBuffers)
 
-    const [head, restStream] = yield extractStreamHead(
+    const [head, restStream] = await extractStreamHead(
       readStream, '::')
 
-    head.length.should.equal(0)
+    assert.equal(head.length, 0)
 
-    yield streamToText(restStream)
-      .should.eventually.equal('hello world')
-  }))
+    const result = await streamToText(restStream)
+    assert.equal(result, 'hello world')
+
+    assert.end()
+  })
 })

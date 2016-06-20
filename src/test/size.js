@@ -1,28 +1,23 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
+
+import { asyncTest } from 'quiver-core/util/tape'
 
 import {
   buffersToStream
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
 import {
   sizeWindowedStream
-} from '../lib/stream-component'
+} from '../lib'
 
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
+test('size windowed buffer test', assert => {
+  assert::asyncTest('basic test', async function(assert) {
+    const assertBuffer = async function(readStream, expected) {
+      const { closed, data } = await readStream.read()
+      const result = data.toString()
+      assert.equal(result, expected)
+    }
 
-chai.use(chaiAsPromised)
-const should = chai.should()
-
-describe('size windowed buffer test', () => {
-  const assertBuffer = (readStream, expected) =>
-    readStream.read()
-      .then(({closed, data}) => 
-        data.toString())
-      .should.eventually.equal(expected)
-
-
-  it('basic test', async(function*() {
     const testBuffers = [
       'Foo',
       'Hello World',
@@ -33,16 +28,18 @@ describe('size windowed buffer test', () => {
     let readStream = buffersToStream(testBuffers)
     readStream = sizeWindowedStream(readStream, 3, 5)
 
-    yield assertBuffer(readStream, 'Foo')
-    yield assertBuffer(readStream, 'Hello')
-    yield assertBuffer(readStream, ' Worl')
-    yield assertBuffer(readStream, 'dYo')
-    yield assertBuffer(readStream, 'Lorem')
-    yield assertBuffer(readStream, ' ipsu')
-    yield assertBuffer(readStream, 'm dol')
-    yield assertBuffer(readStream, 'o')
+    await assertBuffer(readStream, 'Foo')
+    await assertBuffer(readStream, 'Hello')
+    await assertBuffer(readStream, ' Worl')
+    await assertBuffer(readStream, 'dYo')
+    await assertBuffer(readStream, 'Lorem')
+    await assertBuffer(readStream, ' ipsu')
+    await assertBuffer(readStream, 'm dol')
+    await assertBuffer(readStream, 'o')
 
-    const { closed, data } = yield readStream.read()
-    should.exist(closed)
-  }))
+    const { closed, data } = await readStream.read()
+    assert.ok(closed)
+
+    assert.end()
+  })
 })

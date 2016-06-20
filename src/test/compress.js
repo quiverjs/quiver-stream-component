@@ -1,81 +1,114 @@
 import zlib from 'zlib'
-import { async, promisify } from 'quiver/promise'
+import test from 'tape'
 
-import { 
+import { extract } from 'quiver-core/util/immutable'
+import { asyncTest } from 'quiver-core/util/tape'
+
+import {
+  overrideConfig, inputHandlers
+} from 'quiver-core/component/method'
+
+import {
+  loadHandler, streamHandlerLoader, createConfig, createArgs
+} from 'quiver-core/component/util'
+
+import { promisify } from 'quiver-core/util/promise'
+
+import {
   simpleHandler,
-  transformFilter,
-  loadStreamHandler 
-} from 'quiver/component'
+  simpleHandlerBuilder
+} from 'quiver-core/component/constructor'
 
-import { 
-  textToStreamable, 
+import {
+  textToStreamable,
+  streamableToText,
   streamToBuffer,
   streamableToBuffer,
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
-import { compressHandler } from '../lib/stream-component'
-
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
+import { compressHandler } from '../lib'
 
 const gzip = promisify(zlib.gzip)
 const gunzip = promisify(zlib.gunzip)
 
 const testContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi viverra felis sed luctus vulputate. Vivamus imperdiet elit neque, vitae hendrerit nisl feugiat ut. Morbi et mauris a lorem placerat porta eu non quam. Vivamus felis eros, venenatis nec faucibus sed, aliquet vel justo. Nam in cursus ex. Morbi a pellentesque nunc. Aliquam quis sodales enim, id cursus turpis. Suspendisse scelerisque nulla vel placerat aliquam.'
 
-describe('compress stream test', () => {
-  it('basic gzip compression', async(function*() {
-    const compressed = yield gzip(testContent)
+test('compress stream test', assert => {
+  assert::asyncTest('basic gzip compression', async function(assert) {
+    const compressed = await gzip(testContent)
 
-    const uncompressed = yield gunzip(compressed)
-    uncompressed.toString().should.equal(testContent)
+    const uncompressed = await gunzip(compressed)
+    assert.equal(uncompressed.toString(), testContent)
 
     const component = compressHandler()
-      .configOverride({ compressAlgorithm: 'gzip' })
-      .setLoader(loadStreamHandler)
+      ::overrideConfig({ compressAlgorithm: 'gzip' })
+      .setLoader(streamHandlerLoader)
 
-    let gzipHandler = yield component.loadHandler({})
+    const config = createConfig()
+    let gzipHandler = await loadHandler(config, component)
 
     const inputStreamable = textToStreamable(testContent)
 
-    const resultStreamable = yield gzipHandler({}, inputStreamable)
+    const args = createArgs()
+    const resultStreamable = await gzipHandler(args, inputStreamable)
 
-    const resultBuffer = yield streamableToBuffer(resultStreamable)
+    const resultBuffer = await streamableToBuffer(resultStreamable)
 
-    should.equal(Buffer.compare(
+    assert.equal(Buffer.compare(
       resultBuffer, compressed), 0)
 
-    should.exist(inputStreamable.toGzipStreamable)
+    assert.ok(inputStreamable.toGzipStreamable)
 
-    const cachedStreamable = yield inputStreamable.toGzipStreamable()
-    
-    const cachedBuffer = yield cachedStreamable.toStream()
+    const cachedStreamable = await inputStreamable.toGzipStreamable()
+
+    const cachedBuffer = await cachedStreamable.toStream()
       .then(streamToBuffer)
 
-    should.equal(Buffer.compare(
+    assert.equal(Buffer.compare(
       resultBuffer, compressed), 0)
 
-    gzipHandler = compressHandler()
-      .configOverride({
+    assert.end()
+  })
+
+  assert::asyncTest('basic gzip compression', async function(assert) {
+    const gzipHandler = compressHandler()
+      ::overrideConfig({
         compressAlgorithm: 'gzip'
       })
 
     const gunzipHandler = compressHandler()
-      .configOverride({
+      ::overrideConfig({
         compressAlgorithm: 'gunzip'
       })
 
-    const main = simpleHandler(
-      args => testContent, 
-      'void', 'text')
-      .middleware(transformFilter(gzipHandler, 'out'))
-      .middleware(transformFilter(gunzipHandler, 'out'))
+    const main = simpleHandlerBuilder(
+      config => {
+        const { gzip, gunzip } = config::extract()
 
-    const handler = yield main.loadHandler({})
+        return async args => {
+          const streamable = textToStreamable(testContent)
+          const streamable2 = await gzip(args, streamable)
+          return gunzip(args, streamable2)
+        }
+      },
+      {
+        inputType: 'void',
+        outputType: 'streamable'
+      })
+    ::inputHandlers({
+      gzip: gzipHandler,
+      gunzip: gunzipHandler
+    })
 
-    yield handler().should.eventually.equal(testContent)
-  }))
+    const config = createConfig()
+    const handler = await loadHandler(config, main)
+
+    const args = createArgs()
+    const result = await handler(args)
+      .then(streamableToText)
+
+    assert.equal(result, testContent)
+
+    assert.end()
+  })
 })

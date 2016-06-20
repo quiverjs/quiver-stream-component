@@ -1,6 +1,6 @@
-import { streamFilter } from 'quiver/component'
+import { streamFilter } from 'quiver-core/component/constructor'
 
-export const convertStreamable = 
+export const convertStreamable =
 (converter, streamable, inReplace) => {
   const originalToStream = streamable.toStream
   if(!originalToStream) throw new Error(
@@ -15,7 +15,7 @@ export const convertStreamable =
 
   } else {
     return { toStream: convertedToStream }
-  } 
+  }
 }
 
 const streamableConverter = (streamConverter, active, inReplace) => {
@@ -27,11 +27,9 @@ const streamableConverter = (streamConverter, active, inReplace) => {
 
 export const streamConvertFilter = streamFilter(
 (config, handler) => {
-  const {
-    filterMode: mode,
-    streamConverter,  
-    replaceStreamable=false
-  } = config
+  const mode = config.get('filterMode')
+  const streamConverter = config.get('streamConverter')
+  const replaceStreamable = config.get('replaceStreamable', false)
 
   if(!streamConverter) throw new Error(
     'config.streamConverter() required')
@@ -54,5 +52,5 @@ export const streamConvertFilter = streamFilter(
   }
 })
 
-export const makeStreamConvertFilter = 
-  streamConvertFilter.factory()
+export const makeStreamConvertFilter =
+  streamConvertFilter.export()

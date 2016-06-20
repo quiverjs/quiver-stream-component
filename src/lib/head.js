@@ -1,20 +1,18 @@
-import { error } from 'quiver/error'
-import { async } from 'quiver/promise'
-import { pushbackStream } from 'quiver/stream-util'
-import { streamFilter } from 'quiver/component'
+import { error } from 'quiver-core/util/error'
+import { pushbackStream } from 'quiver-core/stream-util'
+import { streamFilter } from 'quiver-core/component/constructor'
 
-export const extractStreamHead = async(
-function*(readStream, separator, options={}) {
+export const extractStreamHead = async function(readStream, separator, options={}) {
   const { maxLength=-1 } = options
   const limit = maxLength > 0
 
-  if(!Buffer.isBuffer(separator)) 
+  if(!Buffer.isBuffer(separator))
     separator = new Buffer(separator)
 
   let headBuffer = new Buffer(0)
 
   while(true) {
-    let { closed, data } = yield readStream.read()
+    let { closed, data } = await readStream.read()
 
     if(closed) throw error(400, 'Bad Request')
     if(!Buffer.isBuffer(data)) data = new Buffer(data)
@@ -27,7 +25,7 @@ function*(readStream, separator, options={}) {
     if(separatorIndex != -1) {
       const headContent = headBuffer.slice(0, separatorIndex)
 
-      const restIndex = separatorIndex - previousBufferSize 
+      const restIndex = separatorIndex - previousBufferSize
         + separator.length
 
       if(restIndex != data.length) {
@@ -41,15 +39,14 @@ function*(readStream, separator, options={}) {
     if(limit && headBuffer.length > maxLength)
       throw error(413, 'Request Entity Too Large')
   }
-})
+}
 
-export const extractFixedStreamHead = async(
-function*(readStream, size) {
+export const extractFixedStreamHead = async function(readStream, size) {
   let remaining = size
   const headBuffers = []
 
   while(true) {
-    let { closed, data } = yield readStream.read()
+    let { closed, data } = await readStream.read()
 
     if(closed) throw error(400, 'Bad Request')
     if(!Buffer.isBuffer(data)) data = new Buffer(data)
@@ -65,7 +62,7 @@ function*(readStream, size) {
     if(bufferSize > remaining) {
       headBuffers.push(data.slice(0, remaining))
 
-      readStream = pushbackStream(readStream, 
+      readStream = pushbackStream(readStream,
         [data.slice(remaining)])
 
       return [Buffer.concat(headBuffers), readStream]
@@ -74,17 +71,16 @@ function*(readStream, size) {
     headBuffers.push(data)
     remaining = remaining - bufferSize
   }
-})
+}
 
 export const headerExtractFilter = streamFilter(
 (config, handler) => {
-  const {
-    headerSeparator='\r\n\r\n',
-    streamHeadMaxLength=-1 
-  } = config
+  let separator = config.get('headerSeparator', '\r\n\r\n')
+  const streamHeadMaxLength = config.get('streamHeadMaxLength', -1)
 
-  if(!Buffer.isBuffer(separator)) 
+  if(!Buffer.isBuffer(separator)) {
     separator = new Buffer(separator)
+  }
 
   const extractOptions = {
     maxLength: streamHeadMaxLength
@@ -102,5 +98,5 @@ export const headerExtractFilter = streamFilter(
     })
 })
 
-export const makeHeaderExtractFilter = 
-  headerExtractFilter.factory()
+export const makeHeaderExtractFilter =
+  headerExtractFilter.export()

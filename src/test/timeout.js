@@ -1,65 +1,78 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
 
-import { 
-  simpleHandler, loadStreamHandler
-} from 'quiver/component'
+import { asyncTest, rejected } from 'quiver-core/util/tape'
 
 import {
-  createChannel, textToStreamable, 
+  overrideConfig
+} from 'quiver-core/component/method'
+
+import {
+  loadHandler, createConfig, createArgs, streamHandlerLoader
+} from 'quiver-core/component/util'
+
+import {
+  simpleHandler, loadStreamHandler
+} from 'quiver-core/component/constructor'
+
+import {
+  createChannel, textToStreamable,
   streamableToText, streamToStreamable
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
 import {
   timeoutStream,
   timeoutStreamFilter
-} from '../lib/stream-component'
+} from '../lib'
 
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
-
-describe('timeout stream test', () => {
-  it('basic test', async(function*() {
+test('timeout stream test', assert => {
+  assert::asyncTest('basic test', async function(assert) {
     let { readStream, writeStream } = createChannel()
     readStream = timeoutStream(readStream, 100)
 
     writeStream.write('foo')
 
-    const { closed, data } = yield readStream.read()
-    data.should.equal('foo')
+    const { closed, data } = await readStream.read()
+    assert.equal(data, 'foo')
 
-    yield readStream.read()
-      .should.be.rejected
-  }))
+    await assert::rejected(readStream.read())
 
-  it('timeout filter test', async(function*() {
+    assert.end()
+  })
+
+  assert::asyncTest('timeout filter test', async function(assert) {
     const timeoutFilter = timeoutStreamFilter()
-      .configOverride({
+      ::overrideConfig({
         filterMode: 'in'
       })
 
     const component = simpleHandler(
       (args, name) => 'Hello, ' + name,
-      'text', 'text')
-    .middleware(timeoutFilter)
-    .setLoader(loadStreamHandler)
+      {
+        inputType: 'text',
+        outputType: 'text'
+      })
+    .addMiddleware(timeoutFilter)
+    .setLoader(streamHandlerLoader)
 
-    const handler = yield component.loadHandler({
+    const config = createConfig({
       streamTimeout: 100
     })
 
-    yield handler({}, textToStreamable('World'))
+    const handler = await loadHandler(config, component)
+
+    const args = createArgs()
+    const result = await handler(args, textToStreamable('World'))
       .then(streamableToText)
-      .should.eventually.equal('Hello, World')
+
+    assert.equal(result, 'Hello, World')
 
     const { readStream, writeStream } = createChannel()
     writeStream.write('foo')
 
     const streamable = streamToStreamable(readStream)
 
-    yield handler({}, streamable)
-      .should.be.rejected
-  }))
+    await assert::rejected(handler(args, streamable))
+
+    assert.end()
+  })
 })

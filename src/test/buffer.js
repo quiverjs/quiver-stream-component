@@ -1,53 +1,63 @@
-import { async } from 'quiver/promise'
+import test from 'tape'
+
+import { asyncTest } from 'quiver-core/util/tape'
 
 import {
   simpleHandler,
   simpleHandlerLoader
-} from 'quiver/component'
+} from 'quiver-core/component/constructor'
+
+import {
+  overrideConfig
+} from 'quiver-core/component/method'
+
+import {
+  loadHandler, createConfig, createArgs
+} from 'quiver-core/component/util'
 
 import {
   textToStream,
   streamToText,
   buffersToStream
-} from 'quiver/stream-util'
+} from 'quiver-core/stream-util'
 
 import {
   bufferConvertHandler,
   bufferConvertFilter,
   bufferStreamFilter
-} from '../lib/stream-component'
+} from '../lib'
 
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-
-chai.use(chaiAsPromised)
-const should = chai.should()
-
-describe('buffer convert test', () => {
-  it('uppercase handler', async(function*() {
+test('buffer convert test', assert => {
+  assert::asyncTest('uppercase handler', async function(assert) {
     const toUpperCase = data =>
       data.toString().toUpperCase()
 
     const component = bufferConvertHandler()
-      .configOverride({
+      ::overrideConfig({
         bufferConverter: toUpperCase
       })
 
-    const handler = yield component.loadHandler({})
+    const config = createConfig()
+    const handler = await loadHandler(config, component)
 
-    yield handler({}, textToStream('Hello World'))
+    const args = createArgs()
+    const result1 = await handler(args, textToStream('Hello World'))
       .then(streamToText)
-      .should.eventually.equal('HELLO WORLD')
+
+    assert.equal(result1, 'HELLO WORLD')
 
     const inputStreamable = buffersToStream(
       ['Hell', 'o Wo', 'rld'])
 
-    yield handler({}, inputStreamable)
+    const result2 = await handler(args, inputStreamable)
       .then(streamToText)
-      .should.eventually.equal('HELLO WORLD')
-  }))
 
-  it('filter convert test', async(function*() {
+    assert.equal(result2, 'HELLO WORLD')
+
+    assert.end()
+  })
+
+  assert::asyncTest('filter convert test', async function(assert) {
     const toUpperCase = data => {
       return data.toString().toUpperCase()
     }
@@ -57,28 +67,36 @@ describe('buffer convert test', () => {
     }
 
     const inFilter = bufferConvertFilter()
-      .configOverride({
+      ::overrideConfig({
         filterMode: 'in',
         bufferConverter: toUpperCase
       })
 
     const outFilter = bufferConvertFilter()
-      .configOverride({
+      ::overrideConfig({
         filterMode: 'out',
         bufferConverter: toLowerCase
       })
 
     const component = simpleHandler((args, name) => {
-      name.should.equal('JOHN')
+      assert.equal(name, 'JOHN')
 
       return 'Hello, ' + name
-    }, 'text', 'text')
-    .middleware(inFilter)
-    .middleware(outFilter)
 
-    const handler = yield component.loadHandler({})
+    }, {
+      inputType: 'text',
+      outputType: 'text'
+    })
+    .addMiddleware(inFilter)
+    .addMiddleware(outFilter)
 
-    yield handler({}, 'John')
-      .should.eventually.equal('hello, john')
-  }))
+    const config = createConfig()
+    const handler = await loadHandler(config, component)
+
+    const args = createArgs()
+    const result = await handler(args, 'John')
+    assert.equal(result, 'hello, john')
+
+    assert.end()
+  })
 })

@@ -1,5 +1,5 @@
-import { async, timeout } from 'quiver/promise'
-import { configMiddleware } from 'quiver/component'
+import { timeout } from 'quiver-core/util/promise'
+import { configMiddleware } from 'quiver-core/component/constructor'
 import { makeStreamConvertFilter } from './stream'
 
 export const throttledStream = (readStream, throttleRate) => {
@@ -10,7 +10,7 @@ export const throttledStream = (readStream, throttleRate) => {
   let lastUpdate = Date.now()
   let isClosed = false
 
-  const throttledRead = async(function*() {
+  const throttledRead = async function() {
     if(isClosed) return { closed: isClosed }
 
     const now = Date.now()
@@ -20,12 +20,12 @@ export const throttledStream = (readStream, throttleRate) => {
       currentRate = 0
       lastUpdate = now
     } else if(currentRate > throttleRate) {
-      yield timeout(100)
+      await timeout(100)
       currentRate = 0
       lastUpdate = now
     }
 
-    const { closed, data } = yield originalRead()
+    const { closed, data } = await originalRead()
     if(closed) {
       isClosed = true
       return { closed }
@@ -37,7 +37,7 @@ export const throttledStream = (readStream, throttleRate) => {
     currentRate += data.length
 
     return { data }
-  })
+  }
 
   const newStream = Object.create(readStream)
   newStream.read = throttledRead
@@ -46,18 +46,19 @@ export const throttledStream = (readStream, throttleRate) => {
 }
 
 export const throttledStreamFilter = makeStreamConvertFilter()
-  .middleware(configMiddleware(
+  .addMiddleware(configMiddleware(
   config => {
-    const { 
-      throttleRate=-1 
-    } = config
-    
+    const throttleRate = throttleRate.get('throttleRate', -1)
+
     if(!(throttleRate > 0)) return
 
-    config.replaceStreamable = true
-    config.streamConverter = readStream =>
+    const streamConverter = readStream =>
       throttledStream(readStream, throttleRate)
+
+    return config
+      .set('replaceStreamable', true)
+      .set('streamConverter', streamConverter)
   }))
 
-export const makeThrottledStreamFilter = 
-  throttledStreamFilter.factory()
+export const makeThrottledStreamFilter =
+  throttledStreamFilter.export()

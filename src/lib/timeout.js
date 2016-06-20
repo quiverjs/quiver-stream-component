@@ -1,14 +1,15 @@
-import { error } from 'quiver/error'
-import { configMiddleware } from 'quiver/component'
-import { async, timeout, reject } from 'quiver/promise'
+import { error } from 'quiver-core/util/error'
+import { timeout } from 'quiver-core/util/promise'
+import { configMiddleware } from 'quiver-core/component/constructor'
 import { makeStreamConvertFilter } from './stream'
 
 export const timeoutStream = (readStream, streamTimeout) => {
   const originalRead = readStream.read
 
-  const startTimeout = () =>
-    timeout(streamTimeout).then(() =>
-      reject(error(408, 'stream timeout')))
+  const startTimeout = async function() {
+    await timeout(streamTimeout)
+    throw error(408, 'stream timeout')
+  }
 
   const timeoutRead = () =>
     Promise.race([
@@ -23,18 +24,18 @@ export const timeoutStream = (readStream, streamTimeout) => {
 }
 
 export const timeoutStreamFilter = makeStreamConvertFilter()
-  .middleware(configMiddleware(
+  .addMiddleware(configMiddleware(
   config => {
-    const { 
-      filterMode='inout',
-      streamTimeout=-1
-    } = config
+    const filterMode = config.get('filterMode', 'inout')
+    const streamTimeout = config.get('streamTimeout', -1)
 
     if(!(streamTimeout > 0)) return
 
-    config.streamConverter = readStream =>
+    const streamConverter = readStream =>
       timeoutStream(readStream, streamTimeout)
+
+    return config.set('streamConverter', streamConverter)
   }))
 
-export const makeTimeoutStreamFilter = 
-  timeoutStreamFilter.factory()
+export const makeTimeoutStreamFilter =
+  timeoutStreamFilter.export()
