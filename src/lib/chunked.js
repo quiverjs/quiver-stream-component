@@ -9,7 +9,7 @@ import {
   extractStreamHead, extractFixedStreamHead
 } from './head'
 
-const pipeChunkedStream = async function(readStream, writeStream, options={}) {
+const pipeChunkedStream = async function(readStream, writeStream) {
   try {
     while(true) {
       const { closed: writeClosed } = await writeStream.prepareWrite()
@@ -86,7 +86,7 @@ const pipeChunk = async function(readStream, writeStream, size) {
   }
 }
 
-const pipeUnchunkedStream = async function(readStream, writeStream, options={}) {
+const pipeUnchunkedStream = async function(readStream, writeStream) {
   try {
     while(true) {
       let chunkHead
@@ -111,7 +111,6 @@ const pipeUnchunkedStream = async function(readStream, writeStream, options={}) 
         writeStream.closeWrite()
         readStream.closeRead()
         return
-
       }
 
       readStream = await pipeChunk(readStream, writeStream, chunkSize)

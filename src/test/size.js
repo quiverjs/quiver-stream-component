@@ -14,6 +14,8 @@ test('size windowed buffer test', assert => {
   assert::asyncTest('basic test', async function(assert) {
     const assertBuffer = async function(readStream, expected) {
       const { closed, data } = await readStream.read()
+      assert.notOk(closed)
+
       const result = data.toString()
       assert.equal(result, expected)
     }
@@ -37,7 +39,7 @@ test('size windowed buffer test', assert => {
     await assertBuffer(readStream, 'm dol')
     await assertBuffer(readStream, 'o')
 
-    const { closed, data } = await readStream.read()
+    const { closed } = await readStream.read()
     assert.ok(closed)
 
     assert.end()

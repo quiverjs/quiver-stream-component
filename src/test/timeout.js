@@ -11,7 +11,7 @@ import {
 } from 'quiver-core/component/util'
 
 import {
-  simpleHandler, loadStreamHandler
+  simpleHandler
 } from 'quiver-core/component/constructor'
 
 import {
@@ -31,7 +31,7 @@ test('timeout stream test', assert => {
 
     writeStream.write('foo')
 
-    const { closed, data } = await readStream.read()
+    const { data } = await readStream.read()
     assert.equal(data, 'foo')
 
     await assert::rejected(readStream.read())

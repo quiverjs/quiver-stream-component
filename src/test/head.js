@@ -3,14 +3,6 @@ import test from 'tape'
 import { asyncTest } from 'quiver-core/util/tape'
 
 import {
-  overrideConfig
-} from 'quiver-core/component/method'
-
-import {
-  loadHandler, createConfig, createArgs
-} from 'quiver-core/component/util'
-
-import {
   streamToText,
   buffersToStream
 } from 'quiver-core/stream-util'

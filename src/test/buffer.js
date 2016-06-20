@@ -3,8 +3,7 @@ import test from 'tape'
 import { asyncTest } from 'quiver-core/util/tape'
 
 import {
-  simpleHandler,
-  simpleHandlerLoader
+  simpleHandler
 } from 'quiver-core/component/constructor'
 
 import {
@@ -23,8 +22,7 @@ import {
 
 import {
   bufferConvertHandler,
-  bufferConvertFilter,
-  bufferStreamFilter
+  bufferConvertFilter
 } from '../lib'
 
 test('buffer convert test', assert => {

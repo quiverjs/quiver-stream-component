@@ -1,3 +1,4 @@
+import { error } from 'quiver-core/util/error'
 import { createHash, getHashes } from 'crypto'
 import { extract } from 'quiver-core/util/immutable'
 import { simpleHandlerBuilder } from 'quiver-core/component/constructor'
@@ -33,8 +34,8 @@ config => {
   const checksumField = 'checksum-' + checksumAlgorithm
 
   if(getHashes().indexOf(checksumAlgorithm) == -1)
-    return reject(error(500, 'platform do not ' +
-      'support checksum algorithm ' + checksumAlgorithm))
+    throw error(500, 'platform do not ' +
+      'support checksum algorithm ' + checksumAlgorithm)
 
   return (args, streamable) =>
     checksumStreamable(streamable, checksumAlgorithm, checksumField)

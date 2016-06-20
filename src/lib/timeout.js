@@ -26,7 +26,6 @@ export const timeoutStream = (readStream, streamTimeout) => {
 export const timeoutStreamFilter = makeStreamConvertFilter()
   .addMiddleware(configMiddleware(
   config => {
-    const filterMode = config.get('filterMode', 'inout')
     const streamTimeout = config.get('streamTimeout', -1)
 
     if(!(streamTimeout > 0)) return

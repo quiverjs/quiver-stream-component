@@ -1,6 +1,8 @@
 import { error } from 'quiver-core/util/error'
-import { pushbackStream } from 'quiver-core/stream-util'
 import { streamFilter } from 'quiver-core/component/constructor'
+import {
+  pushbackStream, streamToStreamable
+} from 'quiver-core/stream-util'
 
 export const extractStreamHead = async function(readStream, separator, options={}) {
   const { maxLength=-1 } = options

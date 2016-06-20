@@ -15,7 +15,6 @@ import {
 import { promisify } from 'quiver-core/util/promise'
 
 import {
-  simpleHandler,
   simpleHandlerBuilder
 } from 'quiver-core/component/constructor'
 
@@ -65,7 +64,7 @@ test('compress stream test', assert => {
       .then(streamToBuffer)
 
     assert.equal(Buffer.compare(
-      resultBuffer, compressed), 0)
+      cachedBuffer, compressed), 0)
 
     assert.end()
   })
